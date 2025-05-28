@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paws & Preferences: Find Your Favorite Kitty</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Paws & Preferences</h1>
+            <p>Swipe right to like, left to dislike</p>
+        </header>
+
+        <div class="cards-container">
+            <div class="card" id="current-card">
+                <div class="loader">Loading cat...</div>
+                <img class="cat-image" src="" alt="Cat">
+                <div class="indicator like-indicator">LIKE</div>
+                <div class="indicator dislike-indicator">DISLIKE</div>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+
+        <div class="results-container hidden">
+            <h2>Your Cat Preferences</h2>
+            <div class="stats">
+                <p>You liked <span id="liked-count">0</span> out of <span id="total-count">0</span> cats</p>
+            </div>
+            <div class="liked-cats-grid" id="liked-cats-container"></div>
+            <button id="restart-btn">Start Over</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
