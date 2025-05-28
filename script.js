@@ -44,6 +44,14 @@ document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('mouseup', handleMouseUp);
         
         restartBtn.addEventListener('click', init);
+
+        document.getElementById('help-btn').addEventListener('click', () => {
+            document.getElementById('help-modal').classList.remove('hidden');
+        });
+
+        document.getElementById('close-help').addEventListener('click', () => {
+            document.getElementById('help-modal').classList.add('hidden');
+        });
     }
     
     async function loadNextCat() {
@@ -121,18 +129,16 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Determine if it's a like or dislike
         const threshold = 100;
-        
-        if (currentPosX > threshold) {
-            // Like
-            card.classList.add('swipe-right');
+
+        if (currentPosX > threshold && currentCatIndex < TOTAL_CATS) {
             likedCats.push(catImage.src);
+            card.classList.add('swipe-right');
             setTimeout(() => {
                 currentCatIndex++;
                 resetCardPosition();
                 loadNextCat();
             }, 300);
-        } else if (currentPosX < -threshold) {
-            // Dislike
+        } else if (currentPosX < -threshold && currentCatIndex < TOTAL_CATS) {
             card.classList.add('swipe-left');
             setTimeout(() => {
                 currentCatIndex++;
@@ -140,9 +146,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 loadNextCat();
             }, 300);
         } else {
-            // Return to center
             resetCardPosition();
         }
+
+        if (currentCatIndex >= TOTAL_CATS) return;
+
+
+
+
+
+
+        
+        // if (currentPosX > threshold) {
+        //     // Like
+        //     card.classList.add('swipe-right');
+        //     likedCats.push(catImage.src);
+        //     setTimeout(() => {
+        //         currentCatIndex++;
+        //         resetCardPosition();
+        //         loadNextCat();
+        //     }, 300);
+        // } else if (currentPosX < -threshold) {
+        //     // Dislike
+        //     card.classList.add('swipe-left');
+        //     setTimeout(() => {
+        //         currentCatIndex++;
+        //         resetCardPosition();
+        //         loadNextCat();
+        //     }, 300);
+        // } else {
+        //     // Return to center
+        //     resetCardPosition();
+        // }
     }
     
     function handleMouseDown(e) {
@@ -180,18 +215,17 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Determine if it's a like or dislike
         const threshold = 100;
-        
-        if (currentPosX > threshold) {
-            // Like
-            card.classList.add('swipe-right');
+
+
+        if (currentPosX > threshold && currentCatIndex < TOTAL_CATS) {
             likedCats.push(catImage.src);
+            card.classList.add('swipe-right');
             setTimeout(() => {
                 currentCatIndex++;
                 resetCardPosition();
                 loadNextCat();
             }, 300);
-        } else if (currentPosX < -threshold) {
-            // Dislike
+        } else if (currentPosX < -threshold && currentCatIndex < TOTAL_CATS) {
             card.classList.add('swipe-left');
             setTimeout(() => {
                 currentCatIndex++;
@@ -199,9 +233,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 loadNextCat();
             }, 300);
         } else {
-            // Return to center
             resetCardPosition();
         }
+
+        if (currentCatIndex >= TOTAL_CATS) return;
+        
+        // if (currentPosX > threshold) {
+        //     // Like
+        //     card.classList.add('swipe-right');
+        //     likedCats.push(catImage.src);
+        //     setTimeout(() => {
+        //         currentCatIndex++;
+        //         resetCardPosition();
+        //         loadNextCat();
+        //     }, 300);
+        // } else if (currentPosX < -threshold) {
+        //     // Dislike
+        //     card.classList.add('swipe-left');
+        //     setTimeout(() => {
+        //         currentCatIndex++;
+        //         resetCardPosition();
+        //         loadNextCat();
+        //     }, 300);
+        // } else {
+        //     // Return to center
+        //     resetCardPosition();
+        // }
     }
     
     function resetCardPosition() {

@@ -149,7 +149,7 @@ header p {
     box-shadow: var(--shadow);
 }
 
-#restart-btn {
+/* #restart-btn {
     background-color: var(--primary-color);
     color: white;
     border: none;
@@ -163,7 +163,23 @@ header p {
 #restart-btn:hover {
     background-color: #ff5252;
     transform: scale(1.05);
+} */
+
+#restart-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
 }
+
+#restart-btn:hover {
+    background-color: #3fb1a7;
+}
+
 
 /* Swipe animations */
 .card.swipe-right {
@@ -187,4 +203,58 @@ header p {
     header h1 {
         font-size: 1.5rem;
     }
+}
+
+.help-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: var(--secondary-color);
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.help-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.help-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 300px;
+    text-align: center;
+}
+
+.help-modal.hidden {
+    display: none;
+}
+
+#close-help {
+    margin-top: 15px;
+    padding: 8px 16px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
