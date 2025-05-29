@@ -21,6 +21,7 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="%23ff6b6b"/><circle cx="6" cy="8" r="2" fill="%23ff6b6b"/><circle cx="18" cy="8" r="2" fill="%23ff6b6b"/><circle cx="9" cy="16" r="2" fill="%23ff6b6b"/><circle cx="15" cy="16" r="2" fill="%23ff6b6b"/></svg>'), auto;
 }
 
 .app-container {
@@ -64,6 +65,7 @@ header p {
     user-select: none;
     touch-action: none;
     transform-style: preserve-3d;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .cat-image {
@@ -149,22 +151,6 @@ header p {
     box-shadow: var(--shadow);
 }
 
-/* #restart-btn {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: transform 0.2s, background-color 0.2s;
-}
-
-#restart-btn:hover {
-    background-color: #ff5252;
-    transform: scale(1.05);
-} */
-
 #restart-btn {
     margin-top: 20px;
     padding: 10px 20px;
@@ -174,12 +160,12 @@ header p {
     border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
+    font: 1em sans-serif;
 }
 
 #restart-btn:hover {
     background-color: #3fb1a7;
 }
-
 
 /* Swipe animations */
 .card.swipe-right {
@@ -257,4 +243,17 @@ header p {
     border: none;
     border-radius: 6px;
     cursor: pointer;
+}
+
+.cat-facts {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 20px 0;
+    box-shadow: var(--shadow);
+}
+
+.cat-facts h3 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
 }

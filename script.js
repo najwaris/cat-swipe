@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Configuration
     const TOTAL_CATS = 10;
     const API_URL = 'https://cataas.com/cat/cute';
+    const CAT_FACTS_API = 'https://cat-fact.herokuapp.com/facts/random';
 
     // DOM Elements
     const card = document.getElementById('current-card');
@@ -54,6 +55,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Haptic feedback function
+    function vibrate(pattern = 50) {
+        if ('vibrate' in navigator) {
+            navigator.vibrate(pattern);
+        }
+    }
+
     async function loadNextCat() {
         if (currentCatIndex >= TOTAL_CATS) {
             showResults();
@@ -65,12 +73,6 @@ document.addEventListener('DOMContentLoaded', function () {
         card.querySelector('.loader').style.display = 'block';
 
         try {
-            // First fetch to get the image ID
-            // const response = await fetch(API_URL);
-            // const data = await response.json();
-
-            // Construct the actual image URL
-            // const imageUrl = `https://cataas.com${data.url}`;
             const imageUrl = `https://cataas.com/cat/cute?${Date.now()}`;
 
             // Preload the image
@@ -89,8 +91,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         } catch (error) {
             console.error('Error loading cat:', error);
-            // Retry or show error
             setTimeout(loadNextCat, 1000);
+        }
+    }
+
+    async function fetchCatFact() {
+        try {
+            const response = await fetch(CAT_FACTS_API);
+            const data = await response.json();
+            return data.text;
+        } catch (error) {
+            console.error('Error fetching cat fact:', error);
+            return "Cats have been domesticated for over 4,000 years!";
         }
     }
 
@@ -123,23 +135,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function bounceCard() {
-        const card = document.querySelector('.cat-card');
-        card.style.transition = 'transform 0.3s ease';
-        card.style.transform = 'translateX(0) scale(1.05)';
-        setTimeout(() => {
-            card.style.transform = 'translateX(0) scale(1)';
-        }, 150);
-    }
-
     function handleTouchEnd() {
         if (!isDragging) return;
         isDragging = false;
 
-        // Determine if it's a like or dislike
         const threshold = 100;
 
         if (currentPosX > threshold && currentCatIndex < TOTAL_CATS) {
+            vibrate([50, 50, 50]);
             likedCats.push(catImage.src);
             card.classList.add('swipe-right');
             setTimeout(() => {
@@ -148,6 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 loadNextCat();
             }, 300);
         } else if (currentPosX < -threshold && currentCatIndex < TOTAL_CATS) {
+            vibrate(200);
             card.classList.add('swipe-left');
             setTimeout(() => {
                 currentCatIndex++;
@@ -157,34 +161,6 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             resetCardPosition();
         }
-
-        if (currentCatIndex >= TOTAL_CATS) {
-            bounceCard();
-            return;
-        }
-
-
-        // if (currentPosX > threshold) {
-        //     // Like
-        //     card.classList.add('swipe-right');
-        //     likedCats.push(catImage.src);
-        //     setTimeout(() => {
-        //         currentCatIndex++;
-        //         resetCardPosition();
-        //         loadNextCat();
-        //     }, 300);
-        // } else if (currentPosX < -threshold) {
-        //     // Dislike
-        //     card.classList.add('swipe-left');
-        //     setTimeout(() => {
-        //         currentCatIndex++;
-        //         resetCardPosition();
-        //         loadNextCat();
-        //     }, 300);
-        // } else {
-        //     // Return to center
-        //     resetCardPosition();
-        // }
     }
 
     function handleMouseDown(e) {
@@ -220,11 +196,10 @@ document.addEventListener('DOMContentLoaded', function () {
         isDragging = false;
         card.style.transition = 'transform 0.3s, opacity 0.3s';
 
-        // Determine if it's a like or dislike
         const threshold = 100;
 
-
         if (currentPosX > threshold && currentCatIndex < TOTAL_CATS) {
+            vibrate([50, 50, 50]);
             likedCats.push(catImage.src);
             card.classList.add('swipe-right');
             setTimeout(() => {
@@ -233,6 +208,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 loadNextCat();
             }, 300);
         } else if (currentPosX < -threshold && currentCatIndex < TOTAL_CATS) {
+            vibrate(200);
             card.classList.add('swipe-left');
             setTimeout(() => {
                 currentCatIndex++;
@@ -242,33 +218,6 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             resetCardPosition();
         }
-
-        if (currentCatIndex >= TOTAL_CATS) {
-            bounceCard();
-            return;
-        }
-
-        // if (currentPosX > threshold) {
-        //     // Like
-        //     card.classList.add('swipe-right');
-        //     likedCats.push(catImage.src);
-        //     setTimeout(() => {
-        //         currentCatIndex++;
-        //         resetCardPosition();
-        //         loadNextCat();
-        //     }, 300);
-        // } else if (currentPosX < -threshold) {
-        //     // Dislike
-        //     card.classList.add('swipe-left');
-        //     setTimeout(() => {
-        //         currentCatIndex++;
-        //         resetCardPosition();
-        //         loadNextCat();
-        //     }, 300);
-        // } else {
-        //     // Return to center
-        //     resetCardPosition();
-        // }
     }
 
     function resetCardPosition() {
@@ -296,12 +245,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 200);
     }
 
-    function showResults() {
-        // Fire confetti
+    async function showResults() {
         fireConfetti();
-
         resultsContainer.classList.remove('hidden');
         likedCountElement.textContent = likedCats.length;
+
+        const catFact = await fetchCatFact();
+        document.getElementById('cat-fact-text').textContent = catFact;
 
         // Display liked cats
         likedCatsContainer.innerHTML = '';
