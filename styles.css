@@ -190,6 +190,7 @@ header p {
 
 #restart-btn:hover {
     background-color: #3fb1a7;
+    transform: scale(1.1);
 }
 
 /* Swipe animations */
@@ -212,7 +213,7 @@ header p {
     }
 
     header h1 {
-        font-size: 1.5rem;
+        font-size: 2rem;
     }
 }
 

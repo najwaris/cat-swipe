@@ -11,8 +11,11 @@
         /* Additional corner page styles */
         .corner-container {
             max-width: 900px;
-            margin: 0 auto;
+            /* margin: 0 auto; */
             padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         .corner-header {
@@ -21,9 +24,9 @@
         }
 
         .corner-header h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: #ff6b6b;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             position: relative;
             display: inline-block;
         }
@@ -69,6 +72,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            border-top: 2px solid #f0f0f0;
+            margin-top: 20px;
+            padding: 25px;
         }
 
         .fact-text {
@@ -92,16 +98,21 @@
         .carousel-btn {
             background: #4ecdc4;
             color: white;
-            border: none;
-            /* width: 40px; */
-            /* height: 40px; */
-            border-radius: 20px;
-            /* font-size: 1.2rem; */
+            /* border: none;
+            border-radius: 8px;
+            font-size: 16px;
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: center; */
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font: 1em sans-serif;
         }
 
         .carousel-btn:hover {
@@ -183,11 +194,13 @@
             color: white;
             border: none;
             padding: 12px 25px;
-            border-radius: 30px;
-            font-size: 1rem;
+            border-radius: 8px;
+            /* font-size: 1rem; */
+            font: 1em sans-serif;
+            font-size: 16px;
             cursor: pointer;
             transition: all 0.3s;
-            font-weight: 600;
+            /* font-weight: 600; */
         }
 
         .next-breed-btn:hover {
@@ -200,8 +213,10 @@
             color: #ff6b6b;
             border: 2px solid #ff6b6b;
             padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 1rem;
+            border-radius: 8px;
+            /* font-size: 1rem; */
+            font: 1em sans-serif;
+            font-size: 16px;
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 600;
@@ -268,6 +283,61 @@
             }
         }
 
+        /* Mobile-specific styles */
+        @media (max-width: 480px) {
+            .corner-container {
+                padding: 15px;
+            }
+
+            /* Increase button spacing */
+            .fact-nav,
+            .breed-spotlight {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                margin-top: 20px;
+            }
+
+            /* Button sizing */
+            .fact-btn,
+            #next-breed,
+            #learn-more {
+                /* width: 100%; */
+                padding: 12px;
+                margin: 5px 0;
+            }
+
+            /* Breed info spacing */
+            .breed-spotlight {
+                padding: 20px 15px;
+            }
+
+            .breed-name {
+                margin: 15px 0 10px;
+            }
+
+            /* Care tips spacing */
+            .care-tips {
+                padding: 20px 15px;
+            }
+
+            .care-tips li {
+                margin-bottom: 15px;
+                padding-left: 35px;
+            }
+
+            /* Fact carousel spacing */
+            .fact-carousel {
+                padding: 20px 15px;
+            }
+
+            .fact-text {
+                min-height: 100px;
+                display: flex;
+                align-items: center;
+            }
+        }
+
         .loading {
             font-style: italic;
             color: #888;
@@ -317,7 +387,7 @@
                 <div class="breed-meta">
                     <!-- <button class="learn-more-btn" id="learn-more">Learn More</button>
                     <button class="next-breed-btn" id="next-breed">Next Breed</button> -->
-                    <button class="fact-btn" id="next-breed">Next Breed</button>
+                    <button class="next-breed-btn" id="next-breed">Next Breed</button>
                     <a href="#" class="learn-more-btn" id="learn-more" target="_blank">Learn More</a>
                     <!-- <button href="#" class="learn-more-btn" id="learn-more" target="_blank">Learn More</button> -->
                 </div>
