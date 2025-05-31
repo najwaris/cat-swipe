@@ -46,13 +46,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         restartBtn.addEventListener('click', init);
 
-        document.getElementById('help-btn').addEventListener('click', () => {
-            document.getElementById('help-modal').classList.remove('hidden');
-        });
+        document.getElementById("help-nav").onclick = () => {
+            document.getElementById("help-modal").classList.remove("hidden");
+        };
 
-        document.getElementById('close-help').addEventListener('click', () => {
-            document.getElementById('help-modal').classList.add('hidden');
-        });
+        document.getElementById("close-help").onclick = () => {
+            document.getElementById("help-modal").classList.add("hidden");
+        };
+
     }
 
     // Haptic feedback function
@@ -85,7 +86,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 card.querySelector('.loader').style.display = 'none';
 
                 // Update progress
-                progressBar.style.width = `${(currentCatIndex / TOTAL_CATS) * 100}%`;
+                progressBar.style.width = `${((currentCatIndex) / TOTAL_CATS) * 100}%`;
+                // progressBar.style.width = `${((currentCatIndex + 1) / TOTAL_CATS) * 100}%`;
                 totalCountElement.textContent = TOTAL_CATS;
             };
 
@@ -247,6 +249,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function showResults() {
         fireConfetti();
+        progressBar.style.width = '100%';
         resultsContainer.classList.remove('hidden');
         likedCountElement.textContent = likedCats.length;
 

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Corner | Paws & Preferences</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Additional corner page styles */
+        .corner-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .corner-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .corner-header h1 {
+            font-size: 2.5rem;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .corner-header h1:after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: #4ecdc4;
+            border-radius: 2px;
+        }
+
+        .corner-header p {
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 10px auto 0;
+        }
+
+        /* Fun Fact Carousel */
+        .fact-carousel {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .fact-carousel h3 {
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .fact-content {
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fact-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .fact-text.loading {
+            color: #999;
+            font-style: italic;
+        }
+
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 15px;
+        }
+
+        .carousel-btn {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            /* width: 40px; */
+            /* height: 40px; */
+            border-radius: 20px;
+            /* font-size: 1.2rem; */
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-btn:hover {
+            background: #3fb1a7;
+            transform: scale(1.1);
+        }
+
+        /* Breed Spotlight */
+        .breed-spotlight {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            /* overflow: hidden; */
+            position: relative;
+            text-align: center;
+        }
+
+        /* .breed-spotlight h3 {
+            color: #ff6b6b;
+            font-size: 1.5rem;
+            margin: 20px 25px 10px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        } */
+
+        .breed-spotlight h3 {
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .breed-image-container {
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .breed-image {
+            width: 100%;
+            max-height: 300px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .breed-image:hover {
+            transform: scale(1.05);
+        }
+
+        .breed-info {
+            border-top: 2px solid #f0f0f0;
+            margin-top: 20px;
+            padding: 25px;
+        }
+
+        .breed-title {
+            font-size: 1.8rem;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+        }
+
+        .breed-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .breed-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        .next-breed-btn {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .next-breed-btn:hover {
+            background: #3fb1a7;
+            transform: translateY(-2px);
+        }
+
+        .learn-more-btn {
+            background: transparent;
+            color: #ff6b6b;
+            border: 2px solid #ff6b6b;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .learn-more-btn:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        /* Care Tips */
+        .care-tips {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .care-tips h3 {
+            color: #ff6b6b;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            text-align: center;
+        }
+
+        .care-tips ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .care-tips li {
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+
+        .care-tips li:last-child {
+            border-bottom: none;
+        }
+
+        .care-tips li:before {
+            content: "🐾";
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .corner-header h1 {
+                font-size: 2rem;
+            }
+
+            .breed-image-container {
+                height: 200px;
+            }
+
+            .fact-carousel,
+            .breed-info,
+            .care-tips {
+                padding: 20px;
+            }
+        }
+
+        .loading {
+            font-style: italic;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="index.html">🐱 Home</a>
+        <a href="corner.html" class="active">📚 Cat Corner</a>
+        <a href="quiz.html">🧠 Quiz</a>
+        <a id="help-nav">❓ Help</a>
+    </nav>
+
+    <div class="corner-container">
+        <header class="corner-header">
+            <h1>Cat Corner</h1>
+            <p>Discover fascinating feline facts, breed information, and care tips</p>
+        </header>
+
+        <!-- Fun Fact Carousel -->
+        <section class="fact-carousel">
+            <h3>Did You Know?</h3>
+            <div class="fact-content">
+                <p class="fact-text loading">Loading cat facts...</p>
+            </div>
+            <div class="carousel-nav">
+                <button class="carousel-btn" id="new-fact">Next Fact</button>
+            </div>
+        </section>
+
+        <!-- Breed Spotlight -->
+        <section class="breed-spotlight">
+            <h3>Breed Spotlight</h3>
+            <div class="breed-image-container">
+                <!-- <img src="https://cataas.com/cat?type=siamese" alt="Siamese cat" class="breed-image" id="breed-image"> -->
+                <img src="" alt="Cat breed" class="breed-image" id="breed-image">
+            </div>
+            <div class="breed-info">
+                <!-- <h2 class="breed-title" id="breed-title">Loading breed...</h2>
+                <p class="breed-description" id="breed-description">Vocal, intelligent, and social cats with striking
+                    blue eyes. Known for their distinctive color points and talkative nature, Siamese cats form strong
+                    bonds with their owners.</p> -->
+                <h3 class="breed-name">Loading breed...</h3>
+                <p class="breed-desc loading">Loading breed information...</p>
+                <div class="breed-meta">
+                    <!-- <button class="learn-more-btn" id="learn-more">Learn More</button>
+                    <button class="next-breed-btn" id="next-breed">Next Breed</button> -->
+                    <button class="fact-btn" id="next-breed">Next Breed</button>
+                    <a href="#" class="learn-more-btn" id="learn-more" target="_blank">Learn More</a>
+                    <!-- <button href="#" class="learn-more-btn" id="learn-more" target="_blank">Learn More</button> -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Care Tips -->
+        <section class="care-tips">
+            <h3>Essential Cat Care Tips</h3>
+            <ul>
+                <li>Brush regularly to reduce hairballs and maintain coat health</li>
+                <li>Keep water bowls separate from food bowls - cats prefer them apart</li>
+                <li>Provide vertical scratching posts to satisfy natural scratching instincts</li>
+                <li>Schedule annual vet check-ups for preventive care</li>
+                <li>Use puzzle feeders to provide mental stimulation during meals</li>
+            </ul>
+        </section>
+    </div>
+
+    <script>
+        // // Fun Facts Data
+        // const funFacts = [
+        //     "Cats have 230 bones - humans only have 206!",
+        //     "A cat's nose print is unique like a human fingerprint",
+        //     "Cats sleep 12-16 hours a day to conserve energy",
+        //     "The oldest known pet cat existed 9,500 years ago",
+        //     "Cats can jump up to 6 times their body length",
+        //     "A cat's purr may have healing properties for bones",
+        //     "Cats have 3 eyelids on each eye"
+        // ];
+
+        // Cat Facts API Integration
+        const factText = document.querySelector('.fact-text');
+        const newFactBtn = document.getElementById('new-fact');
+
+        async function fetchCatFact() {
+            try {
+                factText.textContent = "Loading...";
+                const response = await fetch('https://catfact.ninja/fact');
+                const data = await response.json();
+                factText.textContent = data.fact;
+            } catch (error) {
+                console.error("Error fetching cat fact:", error);
+                factText.textContent = "Did you know? Cats have been domesticated for over 4,000 years!";
+            }
+        }
+
+        newFactBtn.addEventListener('click', fetchCatFact);
+
+        // // Current indices
+        // let currentBreed = 0;
+        // let currentFact = 0;
+
+        // // DOM Elements
+        // // const breedImage = document.getElementById('breed-image');
+        // const breedTitle = document.getElementById('breed-title');
+        // // const breedDesc = document.getElementById('breed-description');
+        // const learnMoreBtn = document.getElementById('learn-more');
+        // // const nextBreedBtn = document.getElementById('next-breed');
+        // // const factText = document.querySelector('.fact-text');
+        // const prevFactBtn = document.querySelector('.prev-fact');
+        // const nextFactBtn = document.querySelector('.next-fact');
+
+        // // Initialize display
+        // updateBreedDisplay();
+        // updateFactDisplay();
+
+        // // Event Listeners
+        // nextBreedBtn.addEventListener('click', () => {
+        //     currentBreed = (currentBreed + 1) % breeds.length;
+        //     updateBreedDisplay();
+        // });
+
+        // learnMoreBtn.addEventListener('click', () => {
+        //     window.open(breeds[currentBreed].learnMore, '_blank');
+        // });
+
+        // nextFactBtn.addEventListener('click', () => {
+        //     currentFact = (currentFact + 1) % funFacts.length;
+        //     updateFactDisplay();
+        // });
+
+        // prevFactBtn.addEventListener('click', () => {
+        //     currentFact = (currentFact - 1 + funFacts.length) % funFacts.length;
+        //     updateFactDisplay();
+        // });
+
+        // // Update functions
+        // function updateBreedDisplay() {
+        //     const breed = breeds[currentBreed];
+        //     breedImage.src = `https://cataas.com/cat?type=${breed.tag}&${Date.now()}`;
+        //     breedImage.alt = `${breed.name} cat`;
+        //     breedTitle.textContent = breed.name;
+        //     breedDesc.textContent = breed.desc;
+        //     learnMoreBtn.href = breed.learnMore;
+        // }
+
+        // function updateFactDisplay() {
+        //     factText.textContent = funFacts[currentFact];
+
+        //     // Add animation
+        //     factText.style.animation = 'none';
+        //     void factText.offsetWidth; // Trigger reflow
+        //     factText.style.animation = 'fadeIn 0.5s ease-in-out';
+        // }
+
+        // // Add animation to CSS
+        // const style = document.createElement('style');
+        // style.textContent = `
+        //     @keyframes fadeIn {
+        //         from { opacity: 0; transform: translateY(10px); }
+        //         to { opacity: 1; transform: translateY(0); }
+        //     }
+        // `;
+        // document.head.appendChild(style);
+
+        // // old version - end
+
+        // Breed Information with CATAAS API
+        const breedImage = document.getElementById('breed-image');
+        const breedName = document.querySelector('.breed-name');
+        const breedDesc = document.querySelector('.breed-desc');
+        const nextBreedBtn = document.getElementById('next-breed');
+        const learnMoreLink = document.getElementById('learn-more');
+
+        const breeds = [
+            {
+                name: "Siamese",
+                desc: "Vocal, intelligent cats with striking blue eyes and color-point coats.",
+                tag: "siamese",
+                learnMore: "https://en.wikipedia.org/wiki/Siamese_cat"
+            },
+            {
+                name: "Persian",
+                desc: "Luxurious long-haired cats with calm, gentle personalities.",
+                tag: "persian",
+                learnMore: "https://en.wikipedia.org/wiki/Persian_cat"
+            },
+            {
+                name: "Maine Coon",
+                desc: "Gentle giants known for their large size and tufted ears.",
+                tag: "mainecoon",
+                learnMore: "https://en.wikipedia.org/wiki/Maine_Coon"
+            },
+            {
+                name: "Bengal",
+                desc: "Energetic cats with wild-looking spotted coats.",
+                tag: "bengal",
+                learnMore: "https://en.wikipedia.org/wiki/Bengal_cat"
+            }
+        ];
+
+        let currentBreedIndex = 0;
+
+        function updateBreedInfo() {
+            const breed = breeds[currentBreedIndex];
+            breedName.textContent = breed.name;
+            breedDesc.textContent = breed.desc;
+            breedImage.src = `https://cataas.com/cat/${breed.tag}?width=600&height=400`;
+            breedImage.alt = `${breed.name} cat`;
+            learnMoreLink.href = breed.learnMore;
+        }
+
+        nextBreedBtn.addEventListener('click', () => {
+            currentBreedIndex = (currentBreedIndex + 1) % breeds.length;
+            updateBreedInfo();
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchCatFact();
+            updateBreedInfo();
+
+            // Add loading handlers for images
+            breedImage.onload = () => {
+                breedImage.style.opacity = 1;
+            };
+            breedImage.style.opacity = 0;
+        });
+    </script>
+    <!-- <script src="script.js"></script> -->
+</body>
+
+</html>
