@@ -102,6 +102,8 @@ header p {
 .loader {
     font-size: 1.2rem;
     color: #666;
+    font-style: italic;
+    text-align: center;
 }
 
 .indicator {

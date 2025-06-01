@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Personality Quiz | Paws & Preferences</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Quiz-specific styles */
+        .quiz-container {
+            max-width: 500px;
+            /* margin: 0 auto; */
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .quiz-header h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .quiz-header h1:after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--secondary-color);
+            border-radius: 2px;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: white;
+            border: 2px solid var(--secondary-color);
+            color: var(--text-color);
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .option-btn:hover {
+            background: rgba(78, 205, 196, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .option-btn.selected {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        .quiz-progress {
+            height: 6px;
+            background: #f0f0f0;
+            border-radius: 3px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+            transition: width 0.3s;
+        }
+
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .prev-btn {
+            background: white;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .next-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            display: none;
+        }
+
+        .result-title {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .result-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 20px auto;
+            border: 5px solid var(--secondary-color);
+        }
+
+        .result-desc {
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .restart-btn {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .restart-btn:hover {
+            background: #3fb1a7;
+            transform: translateY(-2px);
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* Share buttons */
+        .share-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .share-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .twitter-btn {
+            background: #1DA1F2;
+            color: white;
+        }
+
+        .fb-btn {
+            background: #4267B2;
+            color: white;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .share-btn svg {
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 480px) {
+            .question-card {
+                padding: 20px;
+            }
+
+            .option-btn {
+                padding: 12px 15px;
+            }
+
+            .share-buttons {
+                flex-direction: column;
+            }
+
+            .share-btn {
+                justify-content: center;
+            }
+
+            canvas {
+                /* Reduce confetti on mobile for performance */
+                display: none;
+            }
+
+            /* Alternative mobile confetti */
+            .mobile-confetti {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(circle, rgba(255, 107, 107, 0.1) 0%, rgba(78, 205, 196, 0.1) 100%);
+                z-index: 998;
+                pointer-events: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="index.html">🐱 Home</a>
+        <a href="corner.html">📚 Cat Corner</a>
+        <a href="quiz.html" class="active">🧠 Quiz</a>
+        <a id="help-nav">❓ Help</a>
+    </nav>
+
+    <div class="quiz-container">
+        <header class="quiz-header">
+            <h1>Which Cat Are You?</h1>
+            <p>Discover your feline personality match!</p>
+        </header>
+
+        <div class="quiz-progress">
+            <div class="progress-fill" id="quiz-progress"></div>
+        </div>
+
+        <div id="question-container">
+            <!-- Questions will be inserted here by JavaScript -->
+        </div>
+
+        <div class="result-card" id="result-container">
+            <h2 class="result-title" id="result-title">You're a <span id="cat-type">Siamese</span>!</h2>
+            <img src="" alt="Result cat" class="result-image" id="result-image">
+            <p class="result-desc" id="result-desc"></p>
+            <div class="share-buttons">
+                <button class="share-btn twitter-btn" id="share-twitter">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor"
+                            d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z" />
+                    </svg>
+                    Tweet
+                </button>
+                <button class="share-btn fb-btn" id="share-fb">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor"
+                            d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" />
+                    </svg>
+                    Share
+                </button>
+            </div>
+
+            <button class="restart-btn" id="restart-quiz">Take Quiz Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Quiz Questions
+        const questions = [
+            {
+                question: "When you wake up, you...",
+                options: [
+                    "Stretch dramatically and greet the day",
+                    "Demand breakfast immediately",
+                    "Ignore everyone for at least 30 minutes",
+                    "Slowly ease into the day with some alone time"
+                ],
+                // Points for each option (Siamese, Bengal, Persian, Maine Coon)
+                points: [3, 1, 4, 2]
+            },
+            {
+                question: "Your ideal weekend involves...",
+                options: [
+                    "Socializing with friends and family",
+                    "Adventures and exploring new places",
+                    "Quiet relaxation at home",
+                    "A mix of activity and relaxation"
+                ],
+                points: [3, 1, 4, 2]
+            },
+            {
+                question: "How do you handle conflict?",
+                options: [
+                    "Talk it out loudly and passionately",
+                    "Charge in headfirst to resolve it quickly",
+                    "Avoid confrontation if possible",
+                    "Assess the situation calmly before acting"
+                ],
+                points: [3, 1, 4, 2]
+            },
+            {
+                question: "Your friends would describe you as...",
+                options: [
+                    "Vocal and expressive",
+                    "Energetic and playful",
+                    "Gentle and reserved",
+                    "Loyal and dependable"
+                ],
+                points: [3, 1, 4, 2]
+            },
+            {
+                question: "Choose a snack:",
+                options: [
+                    "Something exotic and flavorful",
+                    "Quick protein for energy",
+                    "Comfort food or treats",
+                    "Something hearty and satisfying"
+                ],
+                points: [3, 1, 4, 2]
+            }
+        ];
+
+        // Cat Personality Results
+        const results = {
+            siamese: {
+                title: "You're a Siamese!",
+                desc: "You're vocal, intelligent, and social - just like a Siamese cat! You love being the center of attention and aren't afraid to express your opinions. Your striking personality makes you unforgettable.",
+                image: "https://cataas.com/cat/siamese"
+            },
+            bengal: {
+                title: "You're a Bengal!",
+                desc: "Energetic and adventurous, you're always on the move like a Bengal cat! You thrive on excitement and new experiences. Your wild spirit and playful nature make you the life of the party.",
+                image: "https://cataas.com/cat/bengal"
+            },
+            persian: {
+                title: "You're a Persian!",
+                desc: "Calm and refined, you embody the Persian cat personality. You enjoy the finer things in life and prefer peaceful environments. Your gentle nature makes you a comforting presence to those around you.",
+                image: "https://cataas.com/cat/persian"
+            },
+            mainecoon: {
+                title: "You're a Maine Coon!",
+                desc: "Friendly and dependable, you share traits with the gentle giant Maine Coon. You're loyal to your friends and family, and your easygoing nature makes you approachable. People trust you instinctively.",
+                image: "https://cataas.com/cat/mainecoon"
+            }
+        };
+
+        // DOM Elements
+        const questionContainer = document.getElementById('question-container');
+        const resultContainer = document.getElementById('result-container');
+        const progressFill = document.getElementById('quiz-progress');
+        const restartBtn = document.getElementById('restart-quiz');
+
+        // Quiz State
+        let currentQuestion = 0;
+        let scores = {
+            siamese: 0,
+            bengal: 0,
+            persian: 0,
+            mainecoon: 0
+        };
+
+        // Initialize Quiz
+        function showQuestion() {
+            if (currentQuestion >= questions.length) {
+                showResult();
+                return;
+            }
+
+            const question = questions[currentQuestion];
+            let questionHTML = `
+                <div class="question-card">
+                    <div class="question-text">${question.question}</div>
+                    <div class="options">
+            `;
+
+            question.options.forEach((option, index) => {
+                questionHTML += `
+                    <button class="option-btn" data-index="${index}">${option}</button>
+                `;
+            });
+
+            questionHTML += `
+                    </div>
+                    <div class="quiz-nav">
+                        <button class="nav-btn prev-btn" id="prev-btn" ${currentQuestion === 0 ? 'disabled' : ''}>Previous</button>
+                        <button class="nav-btn next-btn" id="next-btn" disabled>${currentQuestion === questions.length - 1 ? 'See Results' : 'Next'}</button>
+                    </div>
+                </div>
+            `;
+
+            questionContainer.innerHTML = questionHTML;
+            updateProgress();
+
+            // Add event listeners
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.addEventListener('click', selectOption);
+            });
+
+            document.getElementById('prev-btn').addEventListener('click', prevQuestion);
+            document.getElementById('next-btn').addEventListener('click', nextQuestion);
+        }
+
+        // Quiz Functions
+        function selectOption(e) {
+            // Remove selected class from all options
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+
+            // Add selected class to clicked option
+            const selectedBtn = e.target;
+            selectedBtn.classList.add('selected');
+
+            // Enable next button
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function nextQuestion() {
+            // Get selected option
+            const selectedBtn = document.querySelector('.option-btn.selected');
+            if (!selectedBtn) return;
+
+            const selectedIndex = parseInt(selectedBtn.dataset.index);
+            const question = questions[currentQuestion];
+
+            // Add points to each cat type
+            scores.siamese += question.points[selectedIndex] === 3 ? 1 : 0;
+            scores.bengal += question.points[selectedIndex] === 1 ? 1 : 0;
+            scores.persian += question.points[selectedIndex] === 4 ? 1 : 0;
+            scores.mainecoon += question.points[selectedIndex] === 2 ? 1 : 0;
+
+            // Move to next question
+            currentQuestion++;
+            showQuestion();
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion) / questions.length) * 100;
+            progressFill.style.width = `${progress}%`;
+        }
+
+        function fireConfetti() {
+            // Main confetti burst
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff6b6b', '#4ecdc4', '#ffffff']
+            });
+
+            // Add paw prints and cat faces
+            setTimeout(() => {
+                confetti({
+                    particleCount: 30,
+                    spread: 50,
+                    origin: { y: 0.6 },
+                    shapes: ['text'],
+                    shapeOptions: {
+                        text: {
+                            value: ['🐾', '🐱'],
+                            fontSize: 20
+                        }
+                    }
+                });
+            }, 300);
+
+            // Continuous smaller bursts
+            const duration = 3000;
+            const end = Date.now() + duration;
+
+            const frame = () => {
+                confetti({
+                    particleCount: 10,
+                    spread: 70,
+                    origin: { x: Math.random(), y: Math.random() },
+                    colors: ['#ff6b6b', '#4ecdc4']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            };
+
+            frame();
+        }
+
+        function showResult() {
+            // Determine result
+            let maxScore = 0;
+            let resultType = 'siamese';
+
+            for (const type in scores) {
+                if (scores[type] > maxScore) {
+                    maxScore = scores[type];
+                    resultType = type;
+                }
+            }
+
+            // Display result
+            const result = results[resultType];
+            document.getElementById('result-title').textContent = result.title;
+            document.getElementById('result-desc').textContent = result.desc;
+            document.getElementById('result-image').src = result.image;
+            document.getElementById('result-image').alt = resultType + " cat";
+
+            // Hide questions, show result
+            questionContainer.style.display = 'none';
+            resultContainer.style.display = 'block';
+            progressFill.style.width = '100%';
+
+            fireConfetti();
+
+            setUpShareButtons(resultType);
+        }
+
+        function setupShareButtons(resultType) {
+            const quizUrl = window.location.href;
+            const shareText = `I got ${resultType} on the cat personality quiz! Find out which cat you are:`;
+            const hashtags = "CatQuiz,CatPersonality,PawsAndPreferences";
+
+            // Twitter share
+            document.getElementById('share-twitter').addEventListener('click', () => {
+                const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(quizUrl)}&hashtags=${hashtags}`;
+                window.open(twitterUrl, '_blank', 'width=550,height=420');
+            });
+
+            // Facebook share
+            document.getElementById('share-fb').addEventListener('click', () => {
+                const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(quizUrl)}&quote=${encodeURIComponent(shareText)}`;
+                window.open(fbUrl, '_blank', 'width=550,height=420');
+            });
+        }
+
+        function restartQuiz() {
+            // Reset quiz state
+            currentQuestion = 0;
+            scores = {
+                siamese: 0,
+                bengal: 0,
+                persian: 0,
+                mainecoon: 0
+            };
+
+            // Show first question
+            questionContainer.style.display = 'block';
+            resultContainer.style.display = 'none';
+            showQuestion();
+        }
+
+        // Event Listeners
+        restartBtn.addEventListener('click', restartQuiz);
+
+        // Initialize quiz
+        showQuestion();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</body>
+
+</html>
