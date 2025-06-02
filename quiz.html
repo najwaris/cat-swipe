@@ -10,8 +10,8 @@
     <style>
         /* Quiz-specific styles */
         .quiz-container {
-            max-width: 500px;
-            /* margin: 0 auto; */
+            max-width: 600px;
+            margin: 0 auto;
             padding: 20px;
             margin-top: 20px;
             text-align: center;
@@ -21,14 +21,16 @@
         .quiz-header {
             text-align: center;
             margin-bottom: 30px;
+            position: relative;
         }
 
         .quiz-header h1 {
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: var(--primary-color);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             position: relative;
             display: inline-block;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .quiz-header h1:after {
@@ -43,62 +45,95 @@
             border-radius: 2px;
         }
 
-        .question-card {
+        .quiz-header p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 80%;
+            margin: 0 auto;
+        }
+
+        .question-card,
+        .result-card {
             background: white;
             border-radius: 15px;
-            padding: 25px;
-            box-shadow: var(--shadow);
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             margin-bottom: 25px;
+            width: 100%;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .question-text {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
+            font-size: 1.3rem;
+            margin-bottom: 30px;
             color: var(--text-color);
+            font-weight: 600;
+            line-height: 1.4;
         }
 
         .options {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
         .option-btn {
             background: white;
             border: 2px solid var(--secondary-color);
             color: var(--text-color);
-            padding: 12px 20px;
-            border-radius: 8px;
+            padding: 15px 25px;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s;
-            text-align: left;
+            text-align: center;
             font-size: 1rem;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
         .option-btn:hover {
             background: rgba(78, 205, 196, 0.1);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
         }
 
         .option-btn.selected {
             background: var(--secondary-color);
             color: white;
             border-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
         }
 
         .quiz-progress {
-            height: 6px;
+            height: 8px;
             background: #f0f0f0;
-            border-radius: 3px;
-            margin-bottom: 25px;
+            border-radius: 4px;
+            margin-bottom: 30px;
             overflow: hidden;
+            position: relative;
         }
 
         .progress-fill {
             height: 100%;
             width: 0%;
             background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
-            transition: width 0.3s;
+            transition: width 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+            border-radius: 4px;
+        }
+
+        .progress-text {
+            position: absolute;
+            right: 10px;
+            top: -25px;
+            font-size: 0.9rem;
+            color: #666;
         }
 
         .quiz-nav {
@@ -108,11 +143,12 @@
         }
 
         .nav-btn {
-            padding: 10px 20px;
+            padding: 12px 25px;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 1rem;
         }
 
         .prev-btn {
@@ -121,114 +157,217 @@
             color: var(--primary-color);
         }
 
+        .prev-btn:hover {
+            background: rgba(255, 107, 107, 0.1);
+        }
+
         .next-btn {
             background: var(--primary-color);
             color: white;
             border: none;
+            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
+        }
+
+        .next-btn:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 107, 107, 0.4);
         }
 
         .nav-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
         }
 
         .result-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: var(--shadow);
             text-align: center;
             display: none;
         }
 
         .result-title {
             color: var(--primary-color);
-            font-size: 1.8rem;
-            margin-bottom: 15px;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .result-image-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin: 20px auto;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            padding: 8px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
 
         .result-image {
-            width: 200px;
-            height: 200px;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            margin: 20px auto;
-            border: 5px solid var(--secondary-color);
+            border: 4px solid white;
         }
 
         .result-desc {
             line-height: 1.6;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            color: #555;
         }
 
         .restart-btn {
             background: var(--secondary-color);
             color: white;
             border: none;
-            padding: 12px 25px;
+            padding: 15px 30px;
             border-radius: 8px;
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(78, 205, 196, 0.3);
+            margin-top: 20px;
         }
 
         .restart-btn:hover {
             background: #3fb1a7;
-            transform: translateY(-2px);
-        }
-
-        canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 999;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(78, 205, 196, 0.4);
         }
 
         /* Share buttons */
         .share-buttons {
             display: flex;
-            gap: 12px;
+            gap: 15px;
             justify-content: center;
-            margin: 20px 0;
+            margin: 30px 0;
+            flex-wrap: wrap;
         }
 
         .share-btn {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 15px;
+            padding: 12px 20px;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             border: none;
+            color: white;
+            font-size: 0.95rem;
         }
 
         .twitter-btn {
             background: #1DA1F2;
-            color: white;
         }
 
         .fb-btn {
             background: #4267B2;
-            color: white;
+        }
+
+        .ig-btn {
+            background: #E1306C;
+            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
         }
 
         .share-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0.9;
         }
 
         .share-btn svg {
             flex-shrink: 0;
         }
 
+        /* Cat paw cursor for the quiz */
+        /* body.quiz-page {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="%23ff6b6b" d="M12 2a3 3 0 0 0-3 3c0 1.31.83 2.42 2 2.83V9H8v2h3v9.93A7 7 0 0 1 5 12H3a9 9 0 0 0 9 9a9 9 0 0 0 9-9h-2a7 7 0 0 1-7 7V11h3V9h-3V7.83c1.17-.41 2-1.52 2-2.83a3 3 0 0 0-3-3m0 2a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1Z"/></svg>'), auto;
+        } */
+
+        /* Animation for questions */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-card {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        /* Decorative elements */
+        .cat-decoration {
+            position: absolute;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .cat-1 {
+            top: 50px;
+            left: 5%;
+            width: 100px;
+            transform: rotate(-15deg);
+        }
+
+        .cat-2 {
+            bottom: 100px;
+            right: 5%;
+            width: 120px;
+            transform: rotate(15deg);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .quiz-header h1 {
+                font-size: 2rem;
+            }
+
+            .question-card,
+            .result-card {
+                padding: 25px 20px;
+                min-height: 350px;
+            }
+
+            .question-text {
+                font-size: 1.2rem;
+            }
+
+            .result-image-container {
+                width: 180px;
+                height: 180px;
+            }
+        }
+
         @media (max-width: 480px) {
-            .question-card {
-                padding: 20px;
+            .quiz-container {
+                padding: 15px;
+            }
+
+            .quiz-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .quiz-header p {
+                max-width: 100%;
+                font-size: 1rem;
+            }
+
+            .question-card,
+            .result-card {
+                padding: 20px 15px;
+                min-height: 300px;
             }
 
             .option-btn {
@@ -237,33 +376,33 @@
 
             .share-buttons {
                 flex-direction: column;
+                gap: 10px;
             }
 
             .share-btn {
                 justify-content: center;
-            }
-
-            canvas {
-                /* Reduce confetti on mobile for performance */
-                display: none;
-            }
-
-            /* Alternative mobile confetti */
-            .mobile-confetti {
-                position: fixed;
-                top: 0;
-                left: 0;
                 width: 100%;
-                height: 100%;
-                background: radial-gradient(circle, rgba(255, 107, 107, 0.1) 0%, rgba(78, 205, 196, 0.1) 100%);
-                z-index: 998;
-                pointer-events: none;
+            }
+
+            .nav-btn {
+                padding: 10px 15px;
             }
         }
     </style>
 </head>
 
-<body>
+<body class="quiz-page">
+    <!-- Decorative cat elements -->
+    <svg class="cat-decoration cat-1" viewBox="0 0 24 24">
+        <path fill="var(--primary-color)"
+            d="M12 2v2c3.9 0 7 3.1 7 7h2c0-5-4-9-9-9m0 18v-2c-3.9 0-7-3.1-7-7H3c0 5 4 9 9 9m10-10h-2c0-3.9-3.1-7-7-7V3c5 0 9 4 9 9M2 12c0-5 4-9 9-9v2c-3.9 0-7 3.1-7 7H2z" />
+    </svg>
+
+    <svg class="cat-decoration cat-2" viewBox="0 0 24 24">
+        <path fill="var(--secondary-color)"
+            d="M19 11h2v2h-2v-2m-2 2v-2h2v2h-2m-4-2h2v2h-2v-2m-4-2v2h2v-2H7m4 6h2v2h-2v-2m4 2v-2h2v2h-2m4-6v2h2v-2h-2m-8 6h2v2h-2v-2m-8-8h2v2H3v-2m4 0h2v2H7v-2m0 8v-2h2v2H7m-4-4h2v2H3v-2z" />
+    </svg>
+
     <nav class="navbar">
         <a href="index.html">🐱 Home</a>
         <a href="corner.html">📚 Cat Corner</a>
@@ -274,11 +413,12 @@
     <div class="quiz-container">
         <header class="quiz-header">
             <h1>Which Cat Are You?</h1>
-            <p>Discover your feline personality match!</p>
+            <p>Discover your feline personality match with this fun quiz!</p>
         </header>
 
         <div class="quiz-progress">
             <div class="progress-fill" id="quiz-progress"></div>
+            <div class="progress-text" id="progress-text">0/5</div>
         </div>
 
         <div id="question-container">
@@ -287,8 +427,11 @@
 
         <div class="result-card" id="result-container">
             <h2 class="result-title" id="result-title">You're a <span id="cat-type">Siamese</span>!</h2>
-            <img src="" alt="Result cat" class="result-image" id="result-image">
+            <div class="result-image-container">
+                <img src="" alt="Result cat" class="result-image" id="result-image">
+            </div>
             <p class="result-desc" id="result-desc"></p>
+            <!-- Add this to your quiz.html file, replacing the existing share buttons section -->
             <div class="share-buttons">
                 <button class="share-btn twitter-btn" id="share-twitter">
                     <svg viewBox="0 0 24 24" width="18" height="18">
@@ -304,6 +447,13 @@
                     </svg>
                     Share
                 </button>
+                <button class="share-btn ig-btn" id="share-ig">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor"
+                            d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8A1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5a5 5 0 0 1-5 5a5 5 0 0 1-5-5a5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3z" />
+                    </svg>
+                    Instagram
+                </button>
             </div>
 
             <button class="restart-btn" id="restart-quiz">Take Quiz Again</button>
@@ -316,8 +466,8 @@
             {
                 question: "When you wake up, you...",
                 options: [
-                    "Stretch dramatically and greet the day",
-                    "Demand breakfast immediately",
+                    "Stretch dramatically and greet the day with energy",
+                    "Demand breakfast immediately - you're starving!",
                     "Ignore everyone for at least 30 minutes",
                     "Slowly ease into the day with some alone time"
                 ],
@@ -329,8 +479,8 @@
                 options: [
                     "Socializing with friends and family",
                     "Adventures and exploring new places",
-                    "Quiet relaxation at home",
-                    "A mix of activity and relaxation"
+                    "Quiet relaxation at home with a good book",
+                    "A balanced mix of activity and relaxation"
                 ],
                 points: [3, 1, 4, 2]
             },
@@ -347,19 +497,19 @@
             {
                 question: "Your friends would describe you as...",
                 options: [
-                    "Vocal and expressive",
-                    "Energetic and playful",
-                    "Gentle and reserved",
-                    "Loyal and dependable"
+                    "Vocal, expressive, and full of personality",
+                    "Energetic, playful, and always on the move",
+                    "Gentle, reserved, and a calming presence",
+                    "Loyal, dependable, and easygoing"
                 ],
                 points: [3, 1, 4, 2]
             },
             {
-                question: "Choose a snack:",
+                question: "Choose a snack that appeals to you most:",
                 options: [
-                    "Something exotic and flavorful",
-                    "Quick protein for energy",
-                    "Comfort food or treats",
+                    "Something exotic and full of flavor",
+                    "Quick protein for energy - you're busy!",
+                    "Comfort food or sweet treats",
                     "Something hearty and satisfying"
                 ],
                 points: [3, 1, 4, 2]
@@ -370,23 +520,23 @@
         const results = {
             siamese: {
                 title: "You're a Siamese!",
-                desc: "You're vocal, intelligent, and social - just like a Siamese cat! You love being the center of attention and aren't afraid to express your opinions. Your striking personality makes you unforgettable.",
-                image: "https://cataas.com/cat/siamese"
+                desc: "You're vocal, intelligent, and social - just like a Siamese cat! You love being the center of attention and aren't afraid to express your opinions. Your striking personality makes you unforgettable to everyone you meet. Like a Siamese, you form strong bonds with your favorite people and enjoy interactive conversations.",
+                image: "https://cataas.com/cat/siamese?width=400&height=400"
             },
             bengal: {
                 title: "You're a Bengal!",
-                desc: "Energetic and adventurous, you're always on the move like a Bengal cat! You thrive on excitement and new experiences. Your wild spirit and playful nature make you the life of the party.",
-                image: "https://cataas.com/cat/bengal"
+                desc: "Energetic and adventurous, you're always on the move like a Bengal cat! You thrive on excitement and new experiences. Your wild spirit and playful nature make you the life of any gathering. Like Bengals, you're highly intelligent and need plenty of stimulation to stay happy. You're probably the friend who's always planning the next adventure!",
+                image: "https://cataas.com/cat/bengal?width=400&height=400"
             },
             persian: {
                 title: "You're a Persian!",
-                desc: "Calm and refined, you embody the Persian cat personality. You enjoy the finer things in life and prefer peaceful environments. Your gentle nature makes you a comforting presence to those around you.",
-                image: "https://cataas.com/cat/persian"
+                desc: "Calm and refined, you embody the Persian cat personality. You enjoy the finer things in life and prefer peaceful environments. Your gentle nature makes you a comforting presence to those around you. Like Persians, you appreciate routine and a well-ordered life. People are drawn to your serene energy and elegant approach to life.",
+                image: "https://cataas.com/cat/persian?width=400&height=400"
             },
             mainecoon: {
                 title: "You're a Maine Coon!",
-                desc: "Friendly and dependable, you share traits with the gentle giant Maine Coon. You're loyal to your friends and family, and your easygoing nature makes you approachable. People trust you instinctively.",
-                image: "https://cataas.com/cat/mainecoon"
+                desc: "Friendly and dependable, you share traits with the gentle giant Maine Coon. You're loyal to your friends and family, and your easygoing nature makes you approachable. People trust you instinctively, just like these big fluffy cats. Like Maine Coons, you're adaptable to different situations and have a quiet confidence about you. You're the rock in your social circle!",
+                image: "https://cataas.com/cat/mainecoon?width=400&height=400"
             }
         };
 
@@ -394,6 +544,7 @@
         const questionContainer = document.getElementById('question-container');
         const resultContainer = document.getElementById('result-container');
         const progressFill = document.getElementById('quiz-progress');
+        const progressText = document.getElementById('progress-text');
         const restartBtn = document.getElementById('restart-quiz');
 
         // Quiz State
@@ -490,6 +641,7 @@
         function updateProgress() {
             const progress = ((currentQuestion) / questions.length) * 100;
             progressFill.style.width = `${progress}%`;
+            progressText.textContent = `${currentQuestion}/${questions.length}`;
         }
 
         function fireConfetti() {
@@ -510,7 +662,7 @@
                     shapes: ['text'],
                     shapeOptions: {
                         text: {
-                            value: ['🐾', '🐱'],
+                            value: ['🐾', '🐱', '😸', '😻'],
                             fontSize: 20
                         }
                     }
@@ -555,6 +707,7 @@
             document.getElementById('result-desc').textContent = result.desc;
             document.getElementById('result-image').src = result.image;
             document.getElementById('result-image').alt = resultType + " cat";
+            // document.getElementById('cat-type').textContent = resultType;
 
             // Hide questions, show result
             questionContainer.style.display = 'none';
@@ -563,25 +716,123 @@
 
             fireConfetti();
 
-            setUpShareButtons(resultType);
+            setupShareButtons(resultType);
         }
 
         function setupShareButtons(resultType) {
             const quizUrl = window.location.href;
-            const shareText = `I got ${resultType} on the cat personality quiz! Find out which cat you are:`;
+            const result = results[resultType];
+            const shareText = `I got ${resultType.charAt(0).toUpperCase() + resultType.slice(1)} on the cat personality quiz! ${result.desc.substring(0, 100)}...`;
             const hashtags = "CatQuiz,CatPersonality,PawsAndPreferences";
 
-            // Twitter share
+            // Twitter sharing
             document.getElementById('share-twitter').addEventListener('click', () => {
-                const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(quizUrl)}&hashtags=${hashtags}`;
+                // Twitter doesn't support image sharing via URL, but we can share text + link
+                const text = `${shareText} Find out which cat you are: ${quizUrl} ${hashtags.split(',').map(tag => `#${tag}`).join(' ')}`;
+                const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
                 window.open(twitterUrl, '_blank', 'width=550,height=420');
             });
 
-            // Facebook share
+            // Facebook sharing
             document.getElementById('share-fb').addEventListener('click', () => {
-                const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(quizUrl)}&quote=${encodeURIComponent(shareText)}`;
-                window.open(fbUrl, '_blank', 'width=550,height=420');
+                // Facebook supports sharing with OG tags - make sure your page has these meta tags
+                const fbUrl = `https://www.facebook.com/dialog/share?
+            app_id=YOUR_FB_APP_ID&
+            display=popup&
+            href=${encodeURIComponent(quizUrl)}&
+            quote=${encodeURIComponent(shareText)}`;
+                window.open(fbUrl.replace(/\s/g, ''), '_blank', 'width=550,height=420');
             });
+
+            // Instagram sharing (limited - will open app with pre-filled caption)
+            document.getElementById('share-ig').addEventListener('click', async () => {
+                // First create a downloadable image
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 1080;
+                canvas.height = 1080;
+
+                // Draw background
+                ctx.fillStyle = '#f7fff7';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Draw title
+                ctx.fillStyle = '#ff6b6b';
+                ctx.font = 'bold 60px Poppins';
+                ctx.textAlign = 'center';
+                ctx.fillText(result.title, canvas.width / 2, 150);
+
+                // Draw image (needs to be loaded first)
+                const img = new Image();
+                img.crossOrigin = 'Anonymous';
+                img.src = result.image;
+
+                await new Promise((resolve) => {
+                    img.onload = resolve;
+                });
+
+                ctx.drawImage(img, canvas.width / 2 - 200, 200, 400, 400);
+
+                // Draw description
+                ctx.fillStyle = '#292f36';
+                ctx.font = '30px Poppins';
+                const lines = wrapText(ctx, result.desc, 900, 40, 650);
+                lines.forEach((line, i) => {
+                    ctx.fillText(line, canvas.width / 2, 650 + (i * 40));
+                });
+
+                // Convert to blob
+                const dataUrl = canvas.toDataURL('image/png');
+
+                // For mobile devices, we can try to open Instagram directly
+                if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                    // Create a temporary link to download the image
+                    const link = document.createElement('a');
+                    link.download = `cat-quiz-${resultType}.png`;
+                    link.href = dataUrl;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    // Try to open Instagram with the image (won't work on all devices)
+                    setTimeout(() => {
+                        const igUrl = `instagram://library?AssetPath=${encodeURIComponent(link.download)}&caption=${encodeURIComponent(shareText + ' ' + quizUrl)}`;
+                        window.location.href = igUrl;
+
+                        // Fallback to opening Instagram normally if the deep link fails
+                        setTimeout(() => {
+                            window.open('https://www.instagram.com/', '_blank');
+                        }, 500);
+                    }, 1000);
+                } else {
+                    // For desktop, just download the image
+                    const link = document.createElement('a');
+                    link.download = `cat-quiz-${resultType}.png`;
+                    link.href = dataUrl;
+                    link.click();
+                    alert('Your quiz result has been downloaded. You can now upload it to Instagram!');
+                }
+            });
+        }
+
+        // Helper function to wrap text
+        function wrapText(context, text, maxWidth, lineHeight, y) {
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                const word = words[i];
+                const width = context.measureText(currentLine + ' ' + word).width;
+                if (width < maxWidth) {
+                    currentLine += ' ' + word;
+                } else {
+                    lines.push(currentLine);
+                    currentLine = word;
+                }
+            }
+            lines.push(currentLine);
+            return lines;
         }
 
         function restartQuiz() {

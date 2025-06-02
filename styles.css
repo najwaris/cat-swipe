@@ -363,7 +363,9 @@ header p {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
-.fact-card, .meme-card, .breed-card {
+.fact-card,
+.meme-card,
+.breed-card {
     background: white;
     padding: 20px;
     border-radius: 15px;
