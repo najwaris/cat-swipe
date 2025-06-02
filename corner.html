@@ -353,8 +353,20 @@
         <a href="index.html">🐱 Home</a>
         <a href="corner.html" class="active">📚 Cat Corner</a>
         <a href="quiz.html">🧠 Quiz</a>
-        <a id="help-nav">❓ Help</a>
+        <!-- <a id="help-nav">❓ Help</a> -->
     </nav>
+
+    <div class="help-modal" id="help-modal">
+        <div class="help-content">
+            <h2>How to Use</h2>
+            <p>Welcome to Cat Corner! Explore fun facts, breed highlights, and cat care tips below. Swipe through breeds
+                or facts using the buttons.</p>
+            <button id="close-help">Got it!</button>
+        </div>
+    </div>
+
+    <!-- Floating help button -->
+    <div class="help-button hidden" id="help-btn">?</div>
 
     <div class="corner-container">
         <header class="corner-header">
@@ -412,16 +424,6 @@
 
     <script>
         // // Fun Facts Data
-        // const funFacts = [
-        //     "Cats have 230 bones - humans only have 206!",
-        //     "A cat's nose print is unique like a human fingerprint",
-        //     "Cats sleep 12-16 hours a day to conserve energy",
-        //     "The oldest known pet cat existed 9,500 years ago",
-        //     "Cats can jump up to 6 times their body length",
-        //     "A cat's purr may have healing properties for bones",
-        //     "Cats have 3 eyelids on each eye"
-        // ];
-
         // Cat Facts API Integration
         const factText = document.querySelector('.fact-text');
         const newFactBtn = document.getElementById('new-fact');
@@ -439,75 +441,6 @@
         }
 
         newFactBtn.addEventListener('click', fetchCatFact);
-
-        // // Current indices
-        // let currentBreed = 0;
-        // let currentFact = 0;
-
-        // // DOM Elements
-        // // const breedImage = document.getElementById('breed-image');
-        // const breedTitle = document.getElementById('breed-title');
-        // // const breedDesc = document.getElementById('breed-description');
-        // const learnMoreBtn = document.getElementById('learn-more');
-        // // const nextBreedBtn = document.getElementById('next-breed');
-        // // const factText = document.querySelector('.fact-text');
-        // const prevFactBtn = document.querySelector('.prev-fact');
-        // const nextFactBtn = document.querySelector('.next-fact');
-
-        // // Initialize display
-        // updateBreedDisplay();
-        // updateFactDisplay();
-
-        // // Event Listeners
-        // nextBreedBtn.addEventListener('click', () => {
-        //     currentBreed = (currentBreed + 1) % breeds.length;
-        //     updateBreedDisplay();
-        // });
-
-        // learnMoreBtn.addEventListener('click', () => {
-        //     window.open(breeds[currentBreed].learnMore, '_blank');
-        // });
-
-        // nextFactBtn.addEventListener('click', () => {
-        //     currentFact = (currentFact + 1) % funFacts.length;
-        //     updateFactDisplay();
-        // });
-
-        // prevFactBtn.addEventListener('click', () => {
-        //     currentFact = (currentFact - 1 + funFacts.length) % funFacts.length;
-        //     updateFactDisplay();
-        // });
-
-        // // Update functions
-        // function updateBreedDisplay() {
-        //     const breed = breeds[currentBreed];
-        //     breedImage.src = `https://cataas.com/cat?type=${breed.tag}&${Date.now()}`;
-        //     breedImage.alt = `${breed.name} cat`;
-        //     breedTitle.textContent = breed.name;
-        //     breedDesc.textContent = breed.desc;
-        //     learnMoreBtn.href = breed.learnMore;
-        // }
-
-        // function updateFactDisplay() {
-        //     factText.textContent = funFacts[currentFact];
-
-        //     // Add animation
-        //     factText.style.animation = 'none';
-        //     void factText.offsetWidth; // Trigger reflow
-        //     factText.style.animation = 'fadeIn 0.5s ease-in-out';
-        // }
-
-        // // Add animation to CSS
-        // const style = document.createElement('style');
-        // style.textContent = `
-        //     @keyframes fadeIn {
-        //         from { opacity: 0; transform: translateY(10px); }
-        //         to { opacity: 1; transform: translateY(0); }
-        //     }
-        // `;
-        // document.head.appendChild(style);
-
-        // // old version - end
 
         // Breed Information with CATAAS API
         const breedImage = document.getElementById('breed-image');
@@ -569,6 +502,20 @@
                 breedImage.style.opacity = 1;
             };
             breedImage.style.opacity = 0;
+
+            // Help modal handlers
+            const helpModal = document.getElementById('help-modal');
+            const helpBtn = document.getElementById('help-btn');
+            const closeHelp = document.getElementById('close-help');
+
+            closeHelp.onclick = () => {
+                helpModal.classList.add('hidden');
+                helpBtn.classList.remove('hidden');
+            };
+            helpBtn.onclick = () => {
+                helpModal.classList.remove('hidden');
+                helpBtn.classList.add('hidden');
+            };
         });
     </script>
     <!-- <script src="script.js"></script> -->

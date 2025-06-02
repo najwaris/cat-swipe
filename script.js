@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const totalCountElement = document.getElementById('total-count');
     const likedCatsContainer = document.getElementById('liked-cats-container');
     const restartBtn = document.getElementById('restart-btn');
+    
 
     // State
     let currentCatIndex = 0;
@@ -46,12 +47,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
         restartBtn.addEventListener('click', init);
 
-        document.getElementById("help-nav").onclick = () => {
-            document.getElementById("help-modal").classList.remove("hidden");
-        };
+        // document.getElementById("help-nav").onclick = () => {
+        //     document.getElementById("help-modal").classList.remove("hidden");
+        // };
+
+        // document.getElementById("close-help").onclick = () => {
+        //     document.getElementById("help-modal").classList.add("hidden");
+        // };
 
         document.getElementById("close-help").onclick = () => {
             document.getElementById("help-modal").classList.add("hidden");
+            document.getElementById("help-btn").classList.remove("hidden");
+        };
+
+        document.getElementById("help-btn").onclick = () => {
+            document.getElementById("help-modal").classList.remove("hidden");
+            document.getElementById("help-btn").classList.add("hidden");
         };
 
     }

@@ -3,7 +3,7 @@
     --secondary-color: #4ecdc4;
     --background-color: #f7fff7;
     --text-color: #292f36;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 * {
@@ -221,10 +221,11 @@ header p {
 
 .help-button {
     position: fixed;
-    top: 20px;
-    left: 20px;
-    width: 40px;
-    height: 40px;
+    top: auto;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
     background-color: var(--secondary-color);
     color: white;
     font-size: 24px;
@@ -236,6 +237,16 @@ header p {
     box-shadow: var(--shadow);
     cursor: pointer;
     z-index: 1000;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.help-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.help-button.hidden {
+    display: none;
 }
 
 .help-modal {
@@ -255,8 +266,23 @@ header p {
     background: white;
     padding: 30px;
     border-radius: 12px;
-    max-width: 300px;
+    max-width: 500px;
     text-align: center;
+}
+
+.help-content h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.help-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.help-content li::before {
+    content: '';
+    display: none;
 }
 
 .help-modal.hidden {
@@ -314,7 +340,7 @@ header p {
     width: 100%;
     z-index: 1000;
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
 }
 
 .navbar a {
