@@ -7,345 +7,6 @@
     <title>Cat Corner | Paws & Preferences</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Additional corner page styles */
-        .corner-container {
-            max-width: 900px;
-            /* margin: 0 auto; */
-            padding: 20px;
-            margin-top: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .corner-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .corner-header h1 {
-            font-size: 2rem;
-            /* color: #ff6b6b; */
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .corner-header h1:after {
-            content: "";
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: #4ecdc4;
-            border-radius: 2px;
-        }
-
-        .corner-header p {
-            color: #666;
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 10px auto 0;
-        }
-
-        /* Fun Fact Carousel */
-        .fact-carousel {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            margin-bottom: 30px;
-            text-align: center;
-            position: relative;
-        }
-
-        .fact-carousel h3 {
-            color: #ff6b6b;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-
-        .fact-content {
-            min-height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-top: 2px solid #f0f0f0;
-            margin-top: 20px;
-            padding: 25px;
-        }
-
-        .fact-text {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            color: #444;
-        }
-
-        .fact-text.loading {
-            color: #999;
-            font-style: italic;
-        }
-
-        .carousel-nav {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-            gap: 15px;
-        }
-
-        .carousel-btn {
-            background: #4ecdc4;
-            color: white;
-            /* border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center; */
-            margin-top: 20px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            font: 1em sans-serif;
-        }
-
-        .carousel-btn:hover {
-            background: #3fb1a7;
-            transform: scale(1.1);
-        }
-
-        /* Breed Spotlight */
-        .breed-spotlight {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            margin-bottom: 30px;
-            /* overflow: hidden; */
-            position: relative;
-            text-align: center;
-        }
-
-        /* .breed-spotlight h3 {
-            color: #ff6b6b;
-            font-size: 1.5rem;
-            margin: 20px 25px 10px;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 10px;
-        } */
-
-        .breed-spotlight h3 {
-            color: #ff6b6b;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-
-        .breed-image-container {
-            height: 300px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .breed-image {
-            width: 100%;
-            /* max-height: 300px; */
-            height: 100%;
-            /* border: 2px solid #f0f0f0; */
-            border-radius: 15px;
-            margin-bottom: 20px;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-
-        .breed-image:hover {
-            transform: scale(1.05);
-        }
-
-        .breed-info {
-            border-top: 2px solid #f0f0f0;
-            margin-top: 20px;
-            padding: 25px;
-        }
-
-        .breed-title {
-            font-size: 1.8rem;
-            color: #ff6b6b;
-            margin-bottom: 10px;
-        }
-
-        .breed-description {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .breed-meta {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 25px;
-        }
-
-        .next-breed-btn {
-            background: #4ecdc4;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            /* font-size: 1rem; */
-            font: 1em sans-serif;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            /* font-weight: 600; */
-        }
-
-        .next-breed-btn:hover {
-            background: #3fb1a7;
-            transform: translateY(-2px);
-        }
-
-        .learn-more-btn {
-            background: transparent;
-            color: #ff6b6b;
-            border: 2px solid #ff6b6b;
-            padding: 10px 20px;
-            border-radius: 8px;
-            /* font-size: 1rem; */
-            font: 1em sans-serif;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-
-        .learn-more-btn:hover {
-            background: #ff6b6b;
-            color: white;
-        }
-
-        /* Care Tips */
-        .care-tips {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .care-tips h3 {
-            color: #ff6b6b;
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #f0f0f0;
-            text-align: center;
-        }
-
-        .care-tips ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-
-        .care-tips li {
-            padding: 15px 0;
-            border-bottom: 1px solid #f0f0f0;
-            display: flex;
-            align-items: center;
-            font-size: 1.1rem;
-        }
-
-        .care-tips li:last-child {
-            border-bottom: none;
-        }
-
-        .care-tips li:before {
-            content: "🐾";
-            margin-right: 15px;
-            font-size: 1.2rem;
-        }
-
-        @media (max-width: 768px) {
-            .corner-header h1 {
-                font-size: 2rem;
-            }
-
-            .breed-image-container {
-                height: 200px;
-            }
-
-            .fact-carousel,
-            .breed-info,
-            .care-tips {
-                padding: 20px;
-            }
-        }
-
-        /* Mobile-specific styles */
-        @media (max-width: 480px) {
-            .corner-container {
-                padding: 15px;
-            }
-
-            /* Increase button spacing */
-            .fact-nav,
-            .breed-spotlight {
-                display: flex;
-                flex-direction: column;
-                gap: 12px;
-                margin-top: 20px;
-            }
-
-            /* Button sizing */
-            .fact-btn,
-            #next-breed,
-            #learn-more {
-                /* width: 100%; */
-                padding: 12px;
-                margin: 5px 0;
-            }
-
-            /* Breed info spacing */
-            .breed-spotlight {
-                padding: 20px 15px;
-            }
-
-            .breed-name {
-                margin: 15px 0 10px;
-            }
-
-            /* Care tips spacing */
-            .care-tips {
-                padding: 20px 15px;
-            }
-
-            .care-tips li {
-                margin-bottom: 15px;
-                padding-left: 35px;
-            }
-
-            /* Fact carousel spacing */
-            .fact-carousel {
-                padding: 20px 15px;
-            }
-
-            .fact-text {
-                min-height: 100px;
-                display: flex;
-                align-items: center;
-            }
-        }
-
-        .loading {
-            font-style: italic;
-            color: #888;
-        }
-    </style>
 </head>
 
 <body>
@@ -353,22 +14,19 @@
         <a href="index.html">🐱 Home</a>
         <a href="corner.html" class="active">📚 Cat Corner</a>
         <a href="quiz.html">🧠 Quiz</a>
-        <!-- <a id="help-nav">❓ Help</a> -->
     </nav>
 
     <div class="help-modal" id="help-modal">
         <div class="help-content">
             <h2>How to Use</h2>
-            <p>Welcome to Cat Corner! Explore fun facts, breed highlights, and cat care tips below. Swipe through breeds
-                or facts using the buttons.</p>
+            <p>Welcome to Cat Corner! Explore fun facts, breed highlights, and cat care tips below.</p>
             <button id="close-help">Got it!</button>
         </div>
     </div>
 
-    <!-- Floating help button -->
     <div class="help-button hidden" id="help-btn">?</div>
 
-    <div class="corner-container">
+    <div class="app-container">
         <header class="corner-header">
             <h1>Cat Corner</h1>
             <p>Discover fascinating feline facts, breed information, and care tips</p>
@@ -389,22 +47,14 @@
         <section class="breed-spotlight">
             <h3>Breed Spotlight</h3>
             <div class="breed-image-container">
-                <!-- <img src="https://cataas.com/cat?type=siamese" alt="Siamese cat" class="breed-image" id="breed-image"> -->
                 <img src="" alt="Cat breed" class="breed-image" id="breed-image">
             </div>
             <div class="breed-info">
-                <!-- <h2 class="breed-title" id="breed-title">Loading breed...</h2>
-                <p class="breed-description" id="breed-description">Vocal, intelligent, and social cats with striking
-                    blue eyes. Known for their distinctive color points and talkative nature, Siamese cats form strong
-                    bonds with their owners.</p> -->
                 <h3 class="breed-name">Loading breed...</h3>
                 <p class="breed-desc loading">Loading breed information...</p>
                 <div class="breed-meta">
-                    <!-- <button class="learn-more-btn" id="learn-more">Learn More</button>
-                    <button class="next-breed-btn" id="next-breed">Next Breed</button> -->
                     <button class="next-breed-btn" id="next-breed">Next Breed</button>
                     <a href="#" class="learn-more-btn" id="learn-more" target="_blank">Learn More</a>
-                    <!-- <button href="#" class="learn-more-btn" id="learn-more" target="_blank">Learn More</button> -->
                 </div>
             </div>
         </section>
@@ -423,7 +73,6 @@
     </div>
 
     <script>
-        // // Fun Facts Data
         // Cat Facts API Integration
         const factText = document.querySelector('.fact-text');
         const newFactBtn = document.getElementById('new-fact');
@@ -440,9 +89,7 @@
             }
         }
 
-        newFactBtn.addEventListener('click', fetchCatFact);
-
-        // Breed Information with CATAAS API
+        // Breed Information
         const breedImage = document.getElementById('breed-image');
         const breedName = document.querySelector('.breed-name');
         const breedDesc = document.querySelector('.breed-desc');
@@ -487,6 +134,8 @@
             learnMoreLink.href = breed.learnMore;
         }
 
+        // Event Listeners
+        newFactBtn.addEventListener('click', fetchCatFact);
         nextBreedBtn.addEventListener('click', () => {
             currentBreedIndex = (currentBreedIndex + 1) % breeds.length;
             updateBreedInfo();
@@ -496,12 +145,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             fetchCatFact();
             updateBreedInfo();
-
-            // Add loading handlers for images
-            breedImage.onload = () => {
-                breedImage.style.opacity = 1;
-            };
-            breedImage.style.opacity = 0;
 
             // Help modal handlers
             const helpModal = document.getElementById('help-modal');
@@ -518,7 +161,6 @@
             };
         });
     </script>
-    <!-- <script src="script.js"></script> -->
 </body>
 
 </html>

@@ -7,386 +7,23 @@
     <title>Cat Personality Quiz | Paws & Preferences</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Quiz-specific styles */
-        .quiz-container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            margin-top: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .quiz-header {
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .quiz-header h1 {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            position: relative;
-            display: inline-block;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .quiz-header h1:after {
-            content: "";
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: var(--secondary-color);
-            border-radius: 2px;
-        }
-
-        .quiz-header p {
-            font-size: 1.1rem;
-            color: #666;
-            max-width: 80%;
-            margin: 0 auto;
-        }
-
-        .question-card,
-        .result-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            margin-bottom: 25px;
-            width: 100%;
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .question-text {
-            font-size: 1.3rem;
-            margin-bottom: 30px;
-            color: var(--text-color);
-            font-weight: 600;
-            line-height: 1.4;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .option-btn {
-            background: white;
-            border: 2px solid var(--secondary-color);
-            color: var(--text-color);
-            padding: 15px 25px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-            font-size: 1rem;
-            font-weight: 500;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .option-btn:hover {
-            background: rgba(78, 205, 196, 0.1);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .option-btn.selected {
-            background: var(--secondary-color);
-            color: white;
-            border-color: var(--secondary-color);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
-        }
-
-        .quiz-progress {
-            height: 8px;
-            background: #f0f0f0;
-            border-radius: 4px;
-            margin-bottom: 30px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
-            transition: width 0.5s cubic-bezier(0.65, 0, 0.35, 1);
-            border-radius: 4px;
-        }
-
-        .progress-text {
-            position: absolute;
-            right: 10px;
-            top: -25px;
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .quiz-nav {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-
-        .nav-btn {
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1rem;
-        }
-
-        .prev-btn {
-            background: white;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .prev-btn:hover {
-            background: rgba(255, 107, 107, 0.1);
-        }
-
-        .next-btn {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
-        }
-
-        .next-btn:hover {
-            background: #ff5252;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(255, 107, 107, 0.4);
-        }
-
-        .nav-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-            box-shadow: none !important;
-        }
-
-        .result-card {
-            text-align: center;
-            display: none;
-        }
-
-        .result-title {
-            color: var(--primary-color);
-            font-size: 2rem;
-            margin-bottom: 20px;
-            line-height: 1.3;
-        }
-
-        .result-image-container {
-            position: relative;
-            width: 220px;
-            height: 220px;
-            margin: 20px auto;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
-            padding: 8px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .result-image {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid white;
-        }
-
-        .result-desc {
-            line-height: 1.6;
-            margin-bottom: 30px;
-            font-size: 1.1rem;
-            color: #555;
-        }
-
-        .restart-btn {
-            background: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-            box-shadow: 0 4px 10px rgba(78, 205, 196, 0.3);
-            margin-top: 20px;
-        }
-
-        .restart-btn:hover {
-            background: #3fb1a7;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(78, 205, 196, 0.4);
-        }
-
-        /* Share buttons */
-        .share-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin: 30px 0;
-            flex-wrap: wrap;
-        }
-
-        .share-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            color: white;
-            font-size: 0.95rem;
-        }
-
-        .twitter-btn {
-            background: #1DA1F2;
-        }
-
-        .fb-btn {
-            background: #4267B2;
-        }
-
-        .ig-btn {
-            background: #E1306C;
-            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
-        }
-
-        .share-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            opacity: 0.9;
-        }
-
-        .share-btn svg {
-            flex-shrink: 0;
-        }
-
-        /* Cat paw cursor for the quiz */
-        /* body.quiz-page {
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="%23ff6b6b" d="M12 2a3 3 0 0 0-3 3c0 1.31.83 2.42 2 2.83V9H8v2h3v9.93A7 7 0 0 1 5 12H3a9 9 0 0 0 9 9a9 9 0 0 0 9-9h-2a7 7 0 0 1-7 7V11h3V9h-3V7.83c1.17-.41 2-1.52 2-2.83a3 3 0 0 0-3-3m0 2a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1Z"/></svg>'), auto;
-        } */
-
-        /* Animation for questions */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .question-card {
-            animation: fadeInUp 0.5s ease-out;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .quiz-header h1 {
-                font-size: 2rem;
-            }
-
-            .question-card,
-            .result-card {
-                padding: 25px 20px;
-                min-height: 350px;
-            }
-
-            .question-text {
-                font-size: 1.2rem;
-            }
-
-            .result-image-container {
-                width: 180px;
-                height: 180px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .quiz-container {
-                padding: 15px;
-            }
-
-            .quiz-header h1 {
-                font-size: 1.8rem;
-            }
-
-            .quiz-header p {
-                max-width: 100%;
-                font-size: 1rem;
-            }
-
-            .question-card,
-            .result-card {
-                padding: 20px 15px;
-                min-height: 300px;
-            }
-
-            .option-btn {
-                padding: 12px 15px;
-            }
-
-            .share-buttons {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .share-btn {
-                justify-content: center;
-                width: 100%;
-            }
-
-            .nav-btn {
-                padding: 10px 15px;
-            }
-        }
-    </style>
 </head>
 
 <body class="quiz-page">
-
     <nav class="navbar">
         <a href="index.html">🐱 Home</a>
         <a href="corner.html">📚 Cat Corner</a>
         <a href="quiz.html" class="active">🧠 Quiz</a>
-        <!-- <a id="help-nav">❓ Help</a> -->
     </nav>
 
-    <div class="help-modal" id="help-modal" >
+    <div class="help-modal" id="help-modal">
         <div class="help-content" style="width: fit-content;">
             <h2>How to Take the Quiz</h2>
             <ul style="text-align: left; padding-left: 1em; line-height: 1.6;">
-                <li>🐾 Answer fun questions about your lifestyle and habits.</li>
-                <li>🎯 Pick the option that best fits you.</li>
+                <li>🐾 Answer fun questions about your lifestyle and habits</li>
+                <li>🎯 Pick the option that best fits you</li>
                 <li>🐱 Get matched with a cat breed you'll love!</li>
-                <li>🔁 Click “Start Over” to try again anytime.</li>
+                <li>🔁 Click "Start Over" to try again anytime</li>
             </ul>
             <button id="close-help">Got it!</button>
         </div>
@@ -395,7 +32,7 @@
     <!-- Floating help button -->
     <div class="help-button hidden" id="help-btn">?</div>
 
-    <div class="quiz-container">
+    <div class="app-container">
         <header class="quiz-header">
             <h1>Which Cat Are You?</h1>
             <p>Discover your feline personality match with this fun quiz!</p>
@@ -416,30 +53,13 @@
                 <img src="" alt="Result cat" class="result-image" id="result-image">
             </div>
             <p class="result-desc" id="result-desc"></p>
-            <div class="share-buttons">
-                <button class="share-btn twitter-btn" id="share-twitter">
-                    <svg viewBox="0 0 24 24" width="18" height="18">
-                        <path fill="currentColor"
-                            d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z" />
-                    </svg>
-                    Tweet
-                </button>
-                <button class="share-btn fb-btn" id="share-fb">
-                    <svg viewBox="0 0 24 24" width="18" height="18">
-                        <path fill="currentColor"
-                            d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" />
-                    </svg>
-                    Share
-                </button>
-                <button class="share-btn ig-btn" id="share-ig">
-                    <svg viewBox="0 0 24 24" width="18" height="18">
-                        <path fill="currentColor"
-                            d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8A1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5a5 5 0 0 1-5 5a5 5 0 0 1-5-5a5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3z" />
-                    </svg>
-                    Instagram
-                </button>
-            </div>
-
+            <button class="share-btn" id="share-twitter">
+                <svg viewBox="0 0 24 24" width="18" height="18">
+                    <path fill="currentColor"
+                        d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z" />
+                </svg>
+                Share on Twitter
+            </button>
             <button class="restart-btn" id="restart-quiz">Take Quiz Again</button>
         </div>
     </div>
@@ -455,7 +75,6 @@
                     "Ignore everyone for at least 30 minutes",
                     "Slowly ease into the day with some alone time"
                 ],
-                // Points for each option (Siamese, Bengal, Persian, Maine Coon)
                 points: [3, 1, 4, 2]
             },
             {
@@ -581,36 +200,28 @@
             document.getElementById('next-btn').addEventListener('click', nextQuestion);
         }
 
-        // Quiz Functions
         function selectOption(e) {
-            // Remove selected class from all options
             document.querySelectorAll('.option-btn').forEach(btn => {
                 btn.classList.remove('selected');
             });
 
-            // Add selected class to clicked option
             const selectedBtn = e.target;
             selectedBtn.classList.add('selected');
-
-            // Enable next button
             document.getElementById('next-btn').disabled = false;
         }
 
         function nextQuestion() {
-            // Get selected option
             const selectedBtn = document.querySelector('.option-btn.selected');
             if (!selectedBtn) return;
 
             const selectedIndex = parseInt(selectedBtn.dataset.index);
             const question = questions[currentQuestion];
 
-            // Add points to each cat type
             scores.siamese += question.points[selectedIndex] === 3 ? 1 : 0;
             scores.bengal += question.points[selectedIndex] === 1 ? 1 : 0;
             scores.persian += question.points[selectedIndex] === 4 ? 1 : 0;
             scores.mainecoon += question.points[selectedIndex] === 2 ? 1 : 0;
 
-            // Move to next question
             currentQuestion++;
             showQuestion();
         }
@@ -629,7 +240,6 @@
         }
 
         function fireConfetti() {
-            // Main confetti burst
             confetti({
                 particleCount: 150,
                 spread: 70,
@@ -637,7 +247,6 @@
                 colors: ['#ff6b6b', '#4ecdc4', '#ffffff']
             });
 
-            // Add paw prints and cat faces
             setTimeout(() => {
                 confetti({
                     particleCount: 30,
@@ -653,7 +262,6 @@
                 });
             }, 300);
 
-            // Continuous smaller bursts
             const duration = 3000;
             const end = Date.now() + duration;
 
@@ -674,7 +282,6 @@
         }
 
         function showResult() {
-            // Determine result
             let maxScore = 0;
             let resultType = 'siamese';
 
@@ -685,142 +292,40 @@
                 }
             }
 
-            // Display result
             const result = results[resultType];
             document.getElementById('result-title').textContent = result.title;
             document.getElementById('result-desc').textContent = result.desc;
             document.getElementById('result-image').src = result.image;
             document.getElementById('result-image').alt = resultType + " cat";
-            // document.getElementById('cat-type').textContent = resultType;
 
-            // Hide questions, show result
             questionContainer.style.display = 'none';
             resultContainer.style.display = 'block';
+            document.querySelector('.quiz-progress').classList.add('hidden');
             progressFill.style.width = '100%';
 
             fireConfetti();
-
-            setupShareButtons(resultType);
+            setupTwitterShare(resultType);
         }
 
-        function setupShareButtons(resultType) {
+        function setupTwitterShare(resultType) {
             const quizUrl = window.location.href;
             const result = results[resultType];
-            const shareText = `I got ${resultType.charAt(0).toUpperCase() + resultType.slice(1)} on the cat personality quiz! ${result.desc.substring(0, 100)}...`;
-            const hashtags = "CatQuiz,CatPersonality,PawsAndPreferences";
+            const catType = resultType.charAt(0).toUpperCase() + resultType.slice(1);
 
-            // Twitter sharing
+            const shareText = `🐱 Just discovered I'm a ${catType} cat personality! ${result.title}\n\n` +
+                `"${result.desc.substring(0, 120)}..."\n\n` +
+                `Take the quiz and find out which cat matches your personality!`;
+
+            const hashtags = "CatLover, CatPersonality, PawsAndPreferences";
+
             document.getElementById('share-twitter').addEventListener('click', () => {
-                // Twitter doesn't support image sharing via URL, but we can share text + link
-                const text = `${shareText} Find out which cat you are: ${quizUrl} ${hashtags.split(',').map(tag => `#${tag}`).join(' ')}`;
-                const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+                const twitterText = `${shareText}\n\n${quizUrl} ${hashtags.split(',').map(tag => `#${tag}`).join(' ')}`;
+                const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(twitterText)}`;
                 window.open(twitterUrl, '_blank', 'width=550,height=420');
             });
-
-            // Facebook sharing
-            document.getElementById('share-fb').addEventListener('click', () => {
-                // Facebook supports sharing with OG tags - make sure your page has these meta tags
-                const fbUrl = `https://www.facebook.com/dialog/share?
-            app_id=YOUR_FB_APP_ID&
-            display=popup&
-            href=${encodeURIComponent(quizUrl)}&
-            quote=${encodeURIComponent(shareText)}`;
-                window.open(fbUrl.replace(/\s/g, ''), '_blank', 'width=550,height=420');
-            });
-
-            // Instagram sharing (limited - will open app with pre-filled caption)
-            document.getElementById('share-ig').addEventListener('click', async () => {
-                // First create a downloadable image
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                canvas.width = 1080;
-                canvas.height = 1080;
-
-                // Draw background
-                ctx.fillStyle = '#f7fff7';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                // Draw title
-                ctx.fillStyle = '#ff6b6b';
-                ctx.font = 'bold 60px Poppins';
-                ctx.textAlign = 'center';
-                ctx.fillText(result.title, canvas.width / 2, 150);
-
-                // Draw image (needs to be loaded first)
-                const img = new Image();
-                img.crossOrigin = 'Anonymous';
-                img.src = result.image;
-
-                await new Promise((resolve) => {
-                    img.onload = resolve;
-                });
-
-                ctx.drawImage(img, canvas.width / 2 - 200, 200, 400, 400);
-
-                // Draw description
-                ctx.fillStyle = '#292f36';
-                ctx.font = '30px Poppins';
-                const lines = wrapText(ctx, result.desc, 900, 40, 650);
-                lines.forEach((line, i) => {
-                    ctx.fillText(line, canvas.width / 2, 650 + (i * 40));
-                });
-
-                // Convert to blob
-                const dataUrl = canvas.toDataURL('image/png');
-
-                // For mobile devices, we can try to open Instagram directly
-                if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                    // Create a temporary link to download the image
-                    const link = document.createElement('a');
-                    link.download = `cat-quiz-${resultType}.png`;
-                    link.href = dataUrl;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-
-                    // Try to open Instagram with the image (won't work on all devices)
-                    setTimeout(() => {
-                        const igUrl = `instagram://library?AssetPath=${encodeURIComponent(link.download)}&caption=${encodeURIComponent(shareText + ' ' + quizUrl)}`;
-                        window.location.href = igUrl;
-
-                        // Fallback to opening Instagram normally if the deep link fails
-                        setTimeout(() => {
-                            window.open('https://www.instagram.com/', '_blank');
-                        }, 500);
-                    }, 1000);
-                } else {
-                    // For desktop, just download the image
-                    const link = document.createElement('a');
-                    link.download = `cat-quiz-${resultType}.png`;
-                    link.href = dataUrl;
-                    link.click();
-                    alert('Your quiz result has been downloaded. You can now upload it to Instagram!');
-                }
-            });
-        }
-
-        // Helper function to wrap text
-        function wrapText(context, text, maxWidth, lineHeight, y) {
-            const words = text.split(' ');
-            const lines = [];
-            let currentLine = words[0];
-
-            for (let i = 1; i < words.length; i++) {
-                const word = words[i];
-                const width = context.measureText(currentLine + ' ' + word).width;
-                if (width < maxWidth) {
-                    currentLine += ' ' + word;
-                } else {
-                    lines.push(currentLine);
-                    currentLine = word;
-                }
-            }
-            lines.push(currentLine);
-            return lines;
         }
 
         function restartQuiz() {
-            // Reset quiz state
             currentQuestion = 0;
             scores = {
                 siamese: 0,
@@ -829,7 +334,6 @@
                 mainecoon: 0
             };
 
-            // Show first question
             questionContainer.style.display = 'block';
             resultContainer.style.display = 'none';
             showQuestion();
@@ -837,9 +341,6 @@
 
         // Event Listeners
         restartBtn.addEventListener('click', restartQuiz);
-
-        // Initialize quiz
-        showQuestion();
 
         // Help modal handlers
         const helpModal = document.getElementById('help-modal');
@@ -854,6 +355,9 @@
             helpModal.classList.remove('hidden');
             helpBtn.classList.add('hidden');
         };
+
+        // Initialize quiz
+        showQuestion();
     </script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </body>

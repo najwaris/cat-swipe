@@ -1,73 +1,96 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // Configuration
+document.addEventListener('DOMContentLoaded', () => {
+    // Constants
     const TOTAL_CATS = 10;
     const API_URL = 'https://cataas.com/cat/cute';
     const CAT_FACTS_API = 'https://cat-fact.herokuapp.com/facts/random';
+    const SWIPE_THRESHOLD = 100;
+    const DRAG_ROTATION_FACTOR = 20;
+    const OPACITY_FACTOR = 100;
 
     // DOM Elements
-    const card = document.getElementById('current-card');
-    const catImage = card.querySelector('.cat-image');
-    const likeIndicator = card.querySelector('.like-indicator');
-    const dislikeIndicator = card.querySelector('.dislike-indicator');
-    const progressBar = document.querySelector('.progress-bar');
-    const resultsContainer = document.querySelector('.results-container');
-    const likedCountElement = document.getElementById('liked-count');
-    const totalCountElement = document.getElementById('total-count');
-    const likedCatsContainer = document.getElementById('liked-cats-container');
-    const restartBtn = document.getElementById('restart-btn');
-    
+    const elements = {
+        card: document.getElementById('current-card'),
+        catImage: document.querySelector('.cat-image'),
+        likeIndicator: document.querySelector('.like-indicator'),
+        dislikeIndicator: document.querySelector('.dislike-indicator'),
+        progressBar: document.querySelector('.progress-bar'),
+        resultsContainer: document.querySelector('.results-container'),
+        likedCountElement: document.getElementById('liked-count'),
+        totalCountElement: document.getElementById('total-count'),
+        likedCatsContainer: document.getElementById('liked-cats-container'),
+        restartBtn: document.getElementById('restart-btn'),
+        helpModal: document.getElementById('help-modal'),
+        helpBtn: document.getElementById('help-btn'),
+        closeHelp: document.getElementById('close-help'),
+        loader: document.querySelector('.loader')
+    };
 
     // State
-    let currentCatIndex = 0;
-    let likedCats = [];
-    let touchStartX = 0;
-    let touchEndX = 0;
-    let isDragging = false;
-    let startPosX = 0;
-    let currentPosX = 0;
+    let state = {
+        currentCatIndex: 0,
+        likedCats: [],
+        touchStartX: 0,
+        touchEndX: 0,
+        isDragging: false,
+        startPosX: 0,
+        currentPosX: 0
+    };
 
     // Initialize the app
     init();
 
     function init() {
-        currentCatIndex = 0;
-        likedCats = [];
-        progressBar.style.width = '0%';
-        resultsContainer.classList.add('hidden');
+        // Reset state
+        state = {
+            currentCatIndex: 0,
+            likedCats: [],
+            touchStartX: 0,
+            touchEndX: 0,
+            isDragging: false,
+            startPosX: 0,
+            currentPosX: 0
+        };
+
+        // Reset UI
+        elements.progressBar.style.width = '0%';
+        elements.resultsContainer.classList.add('hidden');
+        resetCardPosition();
+
+        // Load first cat
         loadNextCat();
 
-        // Add event listeners for swipe
-        card.addEventListener('touchstart', handleTouchStart, { passive: false });
-        card.addEventListener('touchmove', handleTouchMove, { passive: false });
-        card.addEventListener('touchend', handleTouchEnd);
+        // Event listeners
+        setupEventListeners();
+    }
 
-        card.addEventListener('mousedown', handleMouseDown);
+    function setupEventListeners() {
+        // Touch events
+        elements.card.addEventListener('touchstart', handleTouchStart, { passive: false });
+        elements.card.addEventListener('touchmove', handleTouchMove, { passive: false });
+        elements.card.addEventListener('touchend', handleTouchEnd);
+
+        // Mouse events
+        elements.card.addEventListener('mousedown', handleMouseDown);
         document.addEventListener('mousemove', handleMouseMove);
         document.addEventListener('mouseup', handleMouseUp);
 
-        restartBtn.addEventListener('click', init);
-
-        // document.getElementById("help-nav").onclick = () => {
-        //     document.getElementById("help-modal").classList.remove("hidden");
-        // };
-
-        // document.getElementById("close-help").onclick = () => {
-        //     document.getElementById("help-modal").classList.add("hidden");
-        // };
-
-        document.getElementById("close-help").onclick = () => {
-            document.getElementById("help-modal").classList.add("hidden");
-            document.getElementById("help-btn").classList.remove("hidden");
-        };
-
-        document.getElementById("help-btn").onclick = () => {
-            document.getElementById("help-modal").classList.remove("hidden");
-            document.getElementById("help-btn").classList.add("hidden");
-        };
-
+        // Button events
+        elements.restartBtn.addEventListener('click', init);
+        elements.helpBtn.addEventListener('click', showHelpModal);
+        elements.closeHelp.addEventListener('click', hideHelpModal);
     }
 
-    // Haptic feedback function
+    function showHelpModal() {
+        elements.helpModal.classList.remove('hidden');
+        elements.helpBtn.classList.add('hidden');
+    }
+
+    function hideHelpModal() {
+        elements.helpModal.classList.add('hidden');
+        elements.helpBtn.classList.remove('hidden');
+    }
+
+    // Haptic feedback
     function vibrate(pattern = 50) {
         if ('vibrate' in navigator) {
             navigator.vibrate(pattern);
@@ -75,37 +98,38 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function loadNextCat() {
-        if (currentCatIndex >= TOTAL_CATS) {
+        if (state.currentCatIndex >= TOTAL_CATS) {
             showResults();
             return;
         }
 
         // Show loader
-        catImage.style.display = 'none';
-        card.querySelector('.loader').style.display = 'block';
+        elements.catImage.style.display = 'none';
+        elements.loader.style.display = 'block';
 
         try {
-            const imageUrl = `https://cataas.com/cat/cute?${Date.now()}`;
-
-            // Preload the image
+            const imageUrl = `${API_URL}?${Date.now()}`;
             const img = new Image();
-            img.src = imageUrl;
 
             img.onload = () => {
-                catImage.src = imageUrl;
-                catImage.style.display = 'block';
-                card.querySelector('.loader').style.display = 'none';
+                elements.catImage.src = imageUrl;
+                elements.catImage.style.display = 'block';
+                elements.loader.style.display = 'none';
 
-                // Update progress
-                progressBar.style.width = `${((currentCatIndex) / TOTAL_CATS) * 100}%`;
-                // progressBar.style.width = `${((currentCatIndex + 1) / TOTAL_CATS) * 100}%`;
-                totalCountElement.textContent = TOTAL_CATS;
+                updateProgress();
             };
 
+            img.src = imageUrl;
         } catch (error) {
             console.error('Error loading cat:', error);
             setTimeout(loadNextCat, 1000);
         }
+    }
+
+    function updateProgress() {
+        const progress = (state.currentCatIndex / TOTAL_CATS) * 100;
+        elements.progressBar.style.width = `${progress}%`;
+        elements.totalCountElement.textContent = TOTAL_CATS;
     }
 
     async function fetchCatFact() {
@@ -119,161 +143,149 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Touch event handlers
     function handleTouchStart(e) {
         e.preventDefault();
-        touchStartX = e.changedTouches[0].screenX;
-        startPosX = touchStartX;
-        isDragging = true;
+        state.touchStartX = e.changedTouches[0].screenX;
+        state.startPosX = state.touchStartX;
+        state.isDragging = true;
     }
 
     function handleTouchMove(e) {
-        if (!isDragging) return;
+        if (!state.isDragging) return;
         e.preventDefault();
-        touchEndX = e.changedTouches[0].screenX;
-        currentPosX = touchEndX - startPosX;
 
-        // Move the card
-        card.style.transform = `translateX(${currentPosX}px) rotate(${currentPosX / 20}deg)`;
+        state.touchEndX = e.changedTouches[0].screenX;
+        state.currentPosX = state.touchEndX - state.startPosX;
 
-        // Show indicator
-        if (currentPosX > 50) {
-            likeIndicator.style.opacity = Math.min(1, (currentPosX - 50) / 100);
-            dislikeIndicator.style.opacity = 0;
-        } else if (currentPosX < -50) {
-            dislikeIndicator.style.opacity = Math.min(1, (-currentPosX - 50) / 100);
-            likeIndicator.style.opacity = 0;
-        } else {
-            likeIndicator.style.opacity = 0;
-            dislikeIndicator.style.opacity = 0;
-        }
+        updateCardPosition();
+        updateIndicatorOpacity();
     }
 
     function handleTouchEnd() {
-        if (!isDragging) return;
-        isDragging = false;
+        if (!state.isDragging) return;
+        state.isDragging = false;
 
-        const threshold = 100;
-
-        if (currentPosX > threshold && currentCatIndex < TOTAL_CATS) {
-            vibrate([50, 50, 50]);
-            likedCats.push(catImage.src);
-            card.classList.add('swipe-right');
-            setTimeout(() => {
-                currentCatIndex++;
-                resetCardPosition();
-                loadNextCat();
-            }, 300);
-        } else if (currentPosX < -threshold && currentCatIndex < TOTAL_CATS) {
-            vibrate(200);
-            card.classList.add('swipe-left');
-            setTimeout(() => {
-                currentCatIndex++;
-                resetCardPosition();
-                loadNextCat();
-            }, 300);
-        } else {
-            resetCardPosition();
-        }
+        handleSwipeEnd();
     }
 
+    // Mouse event handlers
     function handleMouseDown(e) {
         e.preventDefault();
-        startPosX = e.clientX;
-        isDragging = true;
-        card.style.transition = 'none';
+        state.startPosX = e.clientX;
+        state.isDragging = true;
+        elements.card.style.transition = 'none';
     }
 
     function handleMouseMove(e) {
-        if (!isDragging) return;
+        if (!state.isDragging) return;
         e.preventDefault();
-        currentPosX = e.clientX - startPosX;
 
-        // Move the card
-        card.style.transform = `translateX(${currentPosX}px) rotate(${currentPosX / 20}deg)`;
+        state.currentPosX = e.clientX - state.startPosX;
 
-        // Show indicator
-        if (currentPosX > 50) {
-            likeIndicator.style.opacity = Math.min(1, (currentPosX - 50) / 100);
-            dislikeIndicator.style.opacity = 0;
-        } else if (currentPosX < -50) {
-            dislikeIndicator.style.opacity = Math.min(1, (-currentPosX - 50) / 100);
-            likeIndicator.style.opacity = 0;
-        } else {
-            likeIndicator.style.opacity = 0;
-            dislikeIndicator.style.opacity = 0;
-        }
+        updateCardPosition();
+        updateIndicatorOpacity();
     }
 
     function handleMouseUp() {
-        if (!isDragging) return;
-        isDragging = false;
-        card.style.transition = 'transform 0.3s, opacity 0.3s';
+        if (!state.isDragging) return;
+        state.isDragging = false;
+        elements.card.style.transition = 'transform 0.3s, opacity 0.3s';
 
-        const threshold = 100;
+        handleSwipeEnd();
+    }
 
-        if (currentPosX > threshold && currentCatIndex < TOTAL_CATS) {
-            vibrate([50, 50, 50]);
-            likedCats.push(catImage.src);
-            card.classList.add('swipe-right');
-            setTimeout(() => {
-                currentCatIndex++;
-                resetCardPosition();
-                loadNextCat();
-            }, 300);
-        } else if (currentPosX < -threshold && currentCatIndex < TOTAL_CATS) {
-            vibrate(200);
-            card.classList.add('swipe-left');
-            setTimeout(() => {
-                currentCatIndex++;
-                resetCardPosition();
-                loadNextCat();
-            }, 300);
+    // Common swipe functions
+    function updateCardPosition() {
+        elements.card.style.transform =
+            `translateX(${state.currentPosX}px) rotate(${state.currentPosX / DRAG_ROTATION_FACTOR}deg)`;
+    }
+
+    function updateIndicatorOpacity() {
+        if (state.currentPosX > 50) {
+            elements.likeIndicator.style.opacity = Math.min(1, (state.currentPosX - 50) / OPACITY_FACTOR);
+            elements.dislikeIndicator.style.opacity = 0;
+        } else if (state.currentPosX < -50) {
+            elements.dislikeIndicator.style.opacity = Math.min(1, (-state.currentPosX - 50) / OPACITY_FACTOR);
+            elements.likeIndicator.style.opacity = 0;
+        } else {
+            elements.likeIndicator.style.opacity = 0;
+            elements.dislikeIndicator.style.opacity = 0;
+        }
+    }
+
+    function handleSwipeEnd() {
+        if (state.currentPosX > SWIPE_THRESHOLD && state.currentCatIndex < TOTAL_CATS) {
+            handleLike();
+        } else if (state.currentPosX < -SWIPE_THRESHOLD && state.currentCatIndex < TOTAL_CATS) {
+            handleDislike();
         } else {
             resetCardPosition();
         }
     }
 
+    function handleLike() {
+        vibrate([50, 50, 50]);
+        state.likedCats.push(elements.catImage.src);
+        elements.card.classList.add('swipe-right');
+        moveToNextCat();
+    }
+
+    function handleDislike() {
+        vibrate(200);
+        elements.card.classList.add('swipe-left');
+        moveToNextCat();
+    }
+
+    function moveToNextCat() {
+        setTimeout(() => {
+            state.currentCatIndex++;
+            resetCardPosition();
+            loadNextCat();
+        }, 300);
+    }
+
     function resetCardPosition() {
-        card.style.transform = 'translateX(0) rotate(0)';
-        card.classList.remove('swipe-right', 'swipe-left');
-        likeIndicator.style.opacity = 0;
-        dislikeIndicator.style.opacity = 0;
+        elements.card.style.transform = 'translateX(0) rotate(0)';
+        elements.card.classList.remove('swipe-right', 'swipe-left');
+        elements.likeIndicator.style.opacity = 0;
+        elements.dislikeIndicator.style.opacity = 0;
     }
 
     function fireConfetti() {
-        const duration = 1 * 1000;
+        const duration = 1000;
         const animationEnd = Date.now() + duration;
         const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 999 };
 
         const interval = setInterval(() => {
-            const timeLeft = animationEnd - Date.now();
-            if (timeLeft <= 0) {
+            if (Date.now() >= animationEnd) {
                 return clearInterval(interval);
             }
 
-            confetti(Object.assign({}, defaults, {
+            confetti({
+                ...defaults,
                 particleCount: 50,
                 origin: { x: Math.random(), y: Math.random() - 0.2 }
-            }));
+            });
         }, 200);
     }
 
     async function showResults() {
         fireConfetti();
-        progressBar.style.width = '100%';
-        resultsContainer.classList.remove('hidden');
-        likedCountElement.textContent = likedCats.length;
+        elements.progressBar.style.width = '100%';
+        elements.resultsContainer.classList.remove('hidden');
+        elements.likedCountElement.textContent = state.likedCats.length;
 
-        const catFact = await fetchCatFact();
-        document.getElementById('cat-fact-text').textContent = catFact;
+        displayLikedCats();
+    }
 
-        // Display liked cats
-        likedCatsContainer.innerHTML = '';
-        likedCats.forEach(catUrl => {
+    function displayLikedCats() {
+        elements.likedCatsContainer.innerHTML = '';
+        state.likedCats.forEach(catUrl => {
             const img = document.createElement('img');
             img.src = catUrl;
             img.alt = 'Liked cat';
-            likedCatsContainer.appendChild(img);
+            elements.likedCatsContainer.appendChild(img);
         });
     }
 });

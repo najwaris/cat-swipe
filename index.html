@@ -14,7 +14,6 @@
         <a href="index.html" class="active">🐱 Home</a>
         <a href="corner.html">📚 Cat Corner</a>
         <a href="quiz.html">🧠 Quiz</a>
-        <!-- <a id="help-nav">❓ Help</a> -->
     </nav>
 
     <div class="app-container">
@@ -23,7 +22,6 @@
             <p>Swipe right to like, left to dislike</p>
         </header>
 
-        <!-- <div class="help-button" id="help-btn">?</div> -->
         <div class="help-modal" id="help-modal">
             <div class="help-content">
                 <h2>How to Use</h2>
@@ -38,7 +36,7 @@
         <div class="cards-container">
             <div class="card" id="current-card">
                 <div class="loader">Loading cat...</div>
-                <img class="cat-image" src="" alt="Cat">
+                <img class="cat-image" src="" alt="Random cat">
                 <div class="indicator like-indicator">LIKE</div>
                 <div class="indicator dislike-indicator">DISLIKE</div>
             </div>
@@ -54,13 +52,7 @@
                 <p>You liked <span id="liked-count">0</span> out of <span id="total-count">0</span> cats</p>
             </div>
             <div class="liked-cats-grid" id="liked-cats-container"></div>
-
-            <!-- <div class="cat-facts">
-                <h3>Did You Know?</h3>
-                <p id="cat-fact-text">Loading fun cat fact...</p>
-            </div> -->
-
-            <button id="restart-btn">Start Over</button>
+            <button id="restart-btn" class="restart-btn">Start Over</button>
         </div>
     </div>
 
