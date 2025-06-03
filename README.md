@@ -21,8 +21,7 @@ Discover your favorite feline friends with this interactive cat discovery app! S
   - Care tips for cat owners
 
 - **Social Sharing**:
-  - Share quiz results on Twitter, Facebook, and Instagram
-  - Dynamic Open Graph meta tags for rich sharing
+  - Share quiz results on Twitter
 
 
 ## 🛠️ Technologies Used
