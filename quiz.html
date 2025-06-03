@@ -312,14 +312,29 @@
             const result = results[resultType];
             const catType = resultType.charAt(0).toUpperCase() + resultType.slice(1);
 
-            const shareText = `🐱 Just discovered I'm a ${catType} cat personality! ${result.title}\n\n` +
-                `"${result.desc.substring(0, 120)}..."\n\n` +
-                `Take the quiz and find out which cat matches your personality!`;
+            // Create the perfectly formatted tweet
+            const tweetParts = [
+                `🐱 I'm a ${catType} cat personality!`,
+                ``,
+                `"${result.desc.split('.')[0]}."`, // First sentence only in quotes
+                ``,
+                `Which cat are you? Take the quiz!`,
+                quizUrl,
+                ``,
+                `#CatLover #CatPersonality #PawsAndPreferences`
+            ];
 
-            const hashtags = "CatLover, CatPersonality, PawsAndPreferences";
+            // Join with newlines
+            const twitterText = tweetParts.join('\n');
+
+            // Verify length (should be well under 280 chars)
+            if (twitterText.length > 280) {
+                console.warn('Tweet is too long:', twitterText.length);
+                // Fallback to simpler version if somehow too long
+                return `🐱 I'm a ${catType}! Take the quiz: ${quizUrl} #CatLover`;
+            }
 
             document.getElementById('share-twitter').addEventListener('click', () => {
-                const twitterText = `${shareText}\n\n${quizUrl} ${hashtags.split(',').map(tag => `#${tag}`).join(' ')}`;
                 const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(twitterText)}`;
                 window.open(twitterUrl, '_blank', 'width=550,height=420');
             });
